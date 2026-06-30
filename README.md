@@ -8,81 +8,70 @@ A research-grade, extensible **laser modeling platform** in Python, built around
 a real system: the all-diode-pumped **1.28 J, 200 ps Nd:YAG amplifier** from
 Raza et al., *Optics Communications* 577 (2025) 131413 (NILOP College, PIEAS).
 
-Every engine is grounded in, and validated against, that paper.
+LASERSIM models the **entire signal chain** of a high-energy picosecond laser,
+from wall socket to delivered application, with ~40 standalone physics engines,
+each validated against the paper or a known physical bound. See
+[`ARCHITECTURE.md`](ARCHITECTURE.md) for the full signal-flow map.
 
-## Engines
+## What it covers
 
-| File | Engine | What it does |
-|---|---|---|
-| `laser_platform.py` | **Oscillator dynamics** | 9 rate-equation models: 3-/4-level, CW, active/passive Q-switch, gain-switched, multimode, mode-locked, thermal |
-| `amplifier.py` | **Amplifier chain** | Frantz-Nodvik multi-pass, super-Gaussian fluence, B-integral; reproduces AMP-1/2/3 |
-| `spatial_gain.py` | **Spatial gain** | 2D non-uniform pump -> gain map -> local extraction (Fig. 2) |
-| `thermal_abcd.py` | **Thermal + cavity** | Lumped thermal-lens + ABCD cavity stability & TEM00 mode size |
-| `thermal_fem.py` | **Radial thermal** | First-principles radial heat solve: T(r), stress, fracture limit |
-| `beam_shaping.py` | **Beam shaping** | Serrated-aperture apodization + FFT spatial filter (Fig. 3) |
-| `relay_imaging.py` | **Relay imaging** | Gaussian q-parameter propagation through relay telescopes (6->16 mm) |
-| `propagation.py` | **Self-focusing** | Split-step NLSE beam propagation + Bespalov-Talanov instability |
-| `temporal.py` | **Pulse dynamics** | Time-resolved Frantz-Nodvik: gain saturation + pulse reshaping |
-| `gain_narrowing.py` | **Gain narrowing** | Finite Nd:YAG bandwidth -> spectral narrowing -> TL duration floor |
-| `polarization.py` | **Polarization** | Jones calculus: waveplates, TFP, Faraday; circular-pol n2 mitigation |
-| `shg.py` | **Frequency doubling** | Second-harmonic generation 1064 -> 532 nm conversion efficiency |
-| `ase.py` | **ASE / parasitics** | Transverse parasitic-oscillation limit, max storable energy |
-| `damage.py` | **Damage auditor** | LIDT pulse-scaling + per-stage fluence safety margin |
-| `opcpa.py` | **OPCPA front-end** | Chirped-pulse stretch/compress + 3-wave OPA gain |
-| `sensitivity.py` | **Tolerancing** | Monte Carlo + sensitivity ranking vs the 1.1% RMS spec |
-| `landscape.py` | **Related work** | Benchmark vs published ps Nd:YAG DPSSL systems |
-| `full_system.py` | **Orchestrator** | End-to-end seed->1.28 J pipeline tying engines together |
-| `sweep.py` | **Batch sweeps** | Vectorized, parallel, GPU-ready (CuPy) parameter sweeps |
-| `data_io.py` | **Data import** | Import + super-Gaussian fit of measured beam/energy data |
-| `report.py` | **Reports** | Auto-generate a paper-style HTML/PDF report of a full run |
-| `dashboard.py` | **Web dashboard** | Streamlit UI with every engine behind live sliders |
-| `validate.py` | **Validation** | Cross-engine pass/fail scorecard vs the paper (CI-friendly) |
-| `examples.py` | **Guided tour** | 8-step end-to-end walkthrough of the whole platform |
-| `cli.py` | **CLI** | Unified `lasersim` command for every engine |
+- **Gain dynamics:** oscillator rate equations (9 models), regen buildup,
+  Frantz-Nodvik amplifier chain, in-pulse temporal reshaping, spatial gain,
+  gain narrowing, ASE / parasitic limits.
+- **Pump & thermal:** 808 nm diode model, radial heat solve, thermal lens +
+  ABCD cavity, coolant convection, rep-rate limit, depolarization.
+- **Beam & propagation:** serrated-aperture + spatial-filter shaping, relay
+  imaging, self-focusing (NLSE), Raman, M^2 / brightness, wavefront + Strehl,
+  adaptive optics, pointing stability.
+- **Nonlinear & harmonics:** polarization (Jones), SHG (532), THG (355),
+  OPCPA, CPA stretch/compress.
+- **Safety & diagnostics:** LIDT damage auditor, eye/skin hazard, timing
+  jitter, autocorrelation, pulse contrast, efficiency budget.
+- **Applications:** laser ranging, micromachining, plasma / soft X-ray,
+  dermatology.
+- **Tooling:** config-driven chains, full-system orchestrator, batch/GPU
+  sweeps, Monte Carlo tolerancing, literature benchmark, data import,
+  HTML/PDF report, Streamlit dashboard, unified CLI, validation scorecard.
 
 ## Quick start
 
 ```bash
 pip install -r requirements.txt
-pip install -e .                      # installs the `lasersim` command
+pip install -e .                  # installs the `lasersim` command
 
-lasersim system                       # whole system, audit table vs the paper
-python validate.py                    # cross-engine pass/fail scorecard
-python examples.py                    # guided 8-step tour
-streamlit run dashboard.py            # interactive web UI
-pytest -q                             # full test suite
-```
-
-## Physics core
-
-**Oscillator (rate equations):**
-```
-dN/dt = Rp - N/tau   - c*sigma*N*S
-dS/dt = c*sigma*N*S  - S/tau_c + beta*N/tau
+lasersim info                     # list every engine
+lasersim system                   # whole NILOP pipeline vs the paper
+lasersim validate                 # cross-engine pass/fail scorecard
+lasersim examples                 # guided tour
+streamlit run dashboard.py        # interactive web UI
+pytest -q                         # full test suite
 ```
 
-**Amplifier (Frantz-Nodvik):**
-```
-F_out = F_sat * ln( 1 + G0 * (exp(F_in / F_sat) - 1) )
-B     = (2*pi/lambda) * integral( n2(z) * I(z) dz )    # circular pol: n2 *= 2/3
+Run any engine directly, e.g.:
+
+```bash
+lasersim amplifier
+lasersim shg
+lasersim ranging --range-km 1000
+lasersim ablation --material steel
+lasersim safety
 ```
 
-**Self-focusing (NLSE, split-step):**
-```
-dE/dz = (i/2k) lap_perp(E) + i k0 n2 |E|^2 E
-```
+## Core physics
 
-**SHG (second harmonic):**
 ```
-eta = tanh^2( L * sqrt( 2 omega^2 deff^2 I / (n^3 eps0 c^3) ) ) * sinc^2(dk L/2)
+Oscillator : dN/dt = Rp - N/tau - c sigma N S ;  dS/dt = c sigma N S - S/tau_c + beta N/tau
+Amplifier  : F_out = F_sat ln(1 + G0 (e^{F_in/F_sat} - 1)) ;  B = (2pi/lambda) integral n2 I dz
+Thermal    : (1/r) d/dr(r k dT/dr) + Q(r) = 0
+SHG        : eta = tanh^2( L sqrt(2 omega^2 deff^2 I / (n^3 eps0 c^3)) )
+Self-focus : dE/dz = (i/2k) lap_perp E + i k0 n2 |E|^2 E
 ```
 
 ## Validation
 
-`python validate.py` runs every engine on the NILOP system and prints a single
-pass/fail scorecard (energy, B-integral, polarization, thermal, relay, ASE,
-damage, oscillator, SHG). The `pytest` suite and GitHub Actions CI run it on
-every push across Python 3.10/3.11/3.12. See `BENCHMARKS.md` for the full
+`lasersim validate` runs every major engine on the NILOP system and prints one
+pass/fail scorecard. The `pytest` suite and GitHub Actions CI run on every push
+across Python 3.10/3.11/3.12. See [`BENCHMARKS.md`](BENCHMARKS.md) for the full
 Table 1 / Table 2 reproduction.
 
 ## License
