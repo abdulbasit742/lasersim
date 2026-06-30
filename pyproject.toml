@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lasersim"
+version = "0.1.0"
+description = "Research-grade laser modeling platform: oscillator dynamics, Frantz-Nodvik amplifier chains, thermal lensing, beam shaping, OPCPA, and batch optimization. Reproduces the NILOP 1.28 J / 200 ps Nd:YAG amplifier."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Abdul Basit" }]
+keywords = ["laser", "Nd:YAG", "rate equations", "amplifier", "Frantz-Nodvik", "OPCPA", "photonics"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+  "numpy>=1.23",
+  "scipy>=1.9",
+  "matplotlib>=3.6",
+]
+
+[project.optional-dependencies]
+dashboard = ["streamlit>=1.28"]
+images = ["pillow>=9.0"]
+gpu = ["cupy-cuda12x>=12.0"]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+lasersim = "cli:main"
+
+[project.urls]
+Homepage = "https://github.com/abdulbasit742/lasersim"
+
+[tool.setuptools]
+py-modules = [
+  "cli", "laser_platform", "amplifier", "spatial_gain", "thermal_abcd",
+  "beam_shaping", "opcpa", "full_system", "sweep", "data_io", "dashboard",
+]
