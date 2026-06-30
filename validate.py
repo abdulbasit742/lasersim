@@ -3,9 +3,9 @@
 ================================================================================
 validate.py  -  cross-engine validation capstone
 ================================================================================
-Runs EVERY major engine on the NILOP 1.28 J / 200 ps Nd:YAG system and checks
-each result against a published number or a known physical bound, then prints
-one pass/fail scorecard. Exit code 0 if all pass (CI-friendly).
+Runs a representative check on EVERY major subsystem of the platform against a
+published number or a known physical bound, then prints one pass/fail scorecard.
+Exit code 0 if all pass (CI-friendly).
 ================================================================================
 """
 from __future__ import annotations
@@ -47,15 +47,14 @@ def _thermal():
     rod = RodThermal()
     _, T1 = solve_radial_T(rod, 50.0)
     r2, T2 = solve_radial_T(rod, 200.0)
-    ok = (T2.max() > T1.max()) and (thermal_focal_length(rod, r2, T2) > 0)
-    return Check("thermal", ok, f"rise {T2.max()-rod.T_coolant:.0f} K @200W")
+    return Check("thermal", (T2.max() > T1.max()) and thermal_focal_length(rod, r2, T2) > 0,
+                 f"rise {T2.max()-rod.T_coolant:.0f} K @200W")
 
 
 def _cooling():
     from cooling import CoolingChannel
     ch = CoolingChannel()
-    return Check("cooling", ch.wall_rise(15, 200) < ch.wall_rise(3, 200),
-                 "more flow -> cooler wall")
+    return Check("cooling", ch.wall_rise(15, 200) < ch.wall_rise(3, 200), "flow cools wall")
 
 
 def _relay():
@@ -63,14 +62,12 @@ def _relay():
     q = q_from_w(3e-3)
     for relay in build_nilop_relays():
         q, _ = propagate(q, relay.elements())
-    d = 2 * w_from_q(q)
-    return Check("relay", d > 6e-3, f"booster {d*1e3:.0f} mm")
+    return Check("relay", 2 * w_from_q(q) > 6e-3, f"booster {2*w_from_q(q)*1e3:.0f} mm")
 
 
 def _ase():
     from ase import ASERod
-    return Check("ase", ASERod(diameter_m=25e-3).parasitic_margin(1.14) < 2.0,
-                 "below parasitic ceiling")
+    return Check("ase", ASERod(diameter_m=25e-3).parasitic_margin(1.14) < 2.0, "below ceiling")
 
 
 def _damage():
@@ -82,27 +79,25 @@ def _oscillator():
     from laser_platform import Cavity, FourLevelLaser
     cav = Cavity()
     N_ss, _ = FourLevelLaser(cav).steady_state()
-    return Check("oscillator", np.isclose(N_ss, cav.N_threshold, rtol=1e-6),
-                 "inversion clamps at threshold")
+    return Check("oscillator", np.isclose(N_ss, cav.N_threshold, rtol=1e-6), "clamps at threshold")
 
 
 def _shg():
     from shg import SHGCrystal
     c = SHGCrystal()
-    return Check("shg", c.efficiency(5e13) > c.efficiency(1e12), "532 nm rises w/ I")
+    return Check("shg", c.efficiency(5e13) > c.efficiency(1e12), "532 rises w/ I")
 
 
 def _regen():
     from regen import Regen
     _, e = Regen().optimum_dump()
-    return Check("regen", e / Regen().seed_J > 1e3, "regen builds up >1e3x")
+    return Check("regen", e / Regen().seed_J > 1e3, "builds up >1e3x")
 
 
 def _wavefront():
     from wavefront import Wavefront
-    a = Wavefront({"defocus": 0.2})
-    b = Wavefront({"defocus": 0.05})
-    return Check("wavefront", b.strehl() > a.strehl(), "less aberration -> higher Strehl")
+    return Check("wavefront", Wavefront({"defocus": 0.05}).strehl() > Wavefront({"defocus": 0.2}).strehl(),
+                 "less aberration -> higher Strehl")
 
 
 def _safety():
@@ -116,9 +111,45 @@ def _materials():
                  "Yb:YAG lower defect")
 
 
+def _dispersion():
+    from dispersion import MATERIALS
+    n = MATERIALS["fused_silica"].n(1064.0)
+    return Check("dispersion", 1.44 < n < 1.46, f"silica n={n:.3f}")
+
+
+def _storage():
+    from storage import Storage
+    return Check("storage", Storage().efficiency(20) > Storage().efficiency(400),
+                 "short pump stores better")
+
+
+def _coatings():
+    from coatings import reflectivity, hr_stack
+    R = reflectivity(hr_stack(1064, 2.3, 1.45, 15), 1064, n_substrate=1.52)
+    return Check("coatings", R > 0.99, f"HR R={R*100:.2f}%")
+
+
+def _harmonics_chain():
+    from chain_e2e import run
+    _, e_uv, lam = run("uv", "none")
+    return Check("chain_e2e", lam == 355 and e_uv > 0, f"UV {e_uv:.0f} mJ @355nm")
+
+
+def _ranging():
+    from ranging import RangingLink
+    return Check("ranging", RangingLink().photons_returned(1000e3) > 0, "returns photons")
+
+
+def _walkoff():
+    from walkoff import WalkOff
+    return Check("walkoff", WalkOff(crystal_mm=5).overlap_fraction() > WalkOff(crystal_mm=50).overlap_fraction(),
+                 "longer crystal less overlap")
+
+
 CHECKS: List[Callable[[], Check]] = [
     _energy, _b_integral, _polarization, _thermal, _cooling, _relay, _ase,
     _damage, _oscillator, _shg, _regen, _wavefront, _safety, _materials,
+    _dispersion, _storage, _coatings, _harmonics_chain, _ranging, _walkoff,
 ]
 
 
