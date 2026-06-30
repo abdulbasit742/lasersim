@@ -8,17 +8,6 @@ runs EVERY engine on the NILOP 1.28 J / 200 ps Nd:YAG system and checks each
 result against a published number or a known physical bound, then prints one
 pass/fail scorecard.
 
-Checks
-------
-  [energy]      full chain lands near 1280 mJ
-  [B-integral]  every stage stays under the ~3 rad self-focusing limit
-  [polariz.]    circular polarization gives the 2/3 n2 reduction
-  [thermal]     first-principles radial solve matches the lumped estimate sign
-  [relay]       beam expands toward the 16 mm booster aperture
-  [ase]         stored energy sits below the parasitic ceiling
-  [damage]      peak fluence stays under the pulse-scaled LIDT
-  [oscillator]  4-level inversion clamps at threshold
-
 Exit code is 0 if all checks pass, 1 otherwise (CI-friendly).
 
 Run:
@@ -102,9 +91,16 @@ def _oscillator() -> Check:
     return Check("oscillator", ok, "inversion clamps at threshold")
 
 
+def _shg() -> Check:
+    from shg import SHGCrystal
+    c = SHGCrystal()
+    ok = c.efficiency(5e13) > c.efficiency(1e12)
+    return Check("shg", ok, "532 nm conversion rises with intensity")
+
+
 CHECKS: List[Callable[[], Check]] = [
     _energy, _b_integral, _polarization, _thermal,
-    _relay, _ase, _damage, _oscillator,
+    _relay, _ase, _damage, _oscillator, _shg,
 ]
 
 
@@ -116,7 +112,7 @@ def main() -> int:
     for fn in CHECKS:
         try:
             c = fn()
-        except Exception as e:  # a broken engine is a failed check
+        except Exception as e:
             c = Check(fn.__name__.strip('_'), False, f"ERROR: {e}")
         results.append(c)
         mark = "PASS" if c.passed else "FAIL"
