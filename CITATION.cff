@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "LASERSIM"
+version: "0.1.0"
+authors:
+  - family-names: "Basit"
+    given-names: "Abdul"
+license: "MIT"
+repository-code: "https://github.com/abdulbasit742/lasersim"
+date-released: "2026-07-04"
+keywords:
+  - scientific software
+  - photonics
+  - simulation
