@@ -160,7 +160,12 @@ def main():
     
     twin_res = nt.validate(corrected=True)
     full_fit_mae = twin_res["mae_twin_pct"]
-    loso_md.append(f"- **Generalization Wording:** The LOSO MAE ({loso_mae:.2f}%) is close to the full-fit MAE ({full_fit_mae:.2f}%), which demonstrates that the model generalizes robustly and does not suffer from overfitting.")
+    diff_pct = loso_mae - full_fit_mae
+    if diff_pct > 5.0:
+        generalization_wording = f"The LOSO MAE ({loso_mae:.2f}%) is higher than the full-fit MAE ({full_fit_mae:.2f}%) by {diff_pct:.2f} percentage points, indicating mild overfitting / parameter sensitivity."
+    else:
+        generalization_wording = f"The LOSO MAE ({loso_mae:.2f}%) is close to the full-fit MAE ({full_fit_mae:.2f}%), indicating that the model generalizes robustly."
+    loso_md.append(f"- **Generalization Wording:** {generalization_wording}")
     loso_md.append("")
     loso_md.append("### Second-System Sanity Check Analysis")
     loso_md.append("We evaluated other published systems from the laser landscape (e.g., Kornev et al. 2018, Yahia 2018) for transfer validation. However, these publications only report high-level metrics (e.g., final output energy, pulse duration, rep rate) and do not provide the detailed internal parameters necessary for MOPA chain simulation (such as input seed energy, stage-by-stage rod diameters, beam diameters, or diode pump energies per stage). Consequently, a quantitative second-system validation was skipped to prevent the unscientific fabrication of parameters.")
@@ -168,10 +173,23 @@ def main():
     
     loso_content = "\n".join(loso_md) + "\n"
     
-    with open("results/NILORE_VALIDATION.md", "a", encoding="utf-8") as f:
-        f.write(loso_content)
+    val_path = "results/NILORE_VALIDATION.md"
+    if os.path.exists(val_path):
+        with open(val_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        # If there is already a Robustness section, split and discard it
+        if "## Robustness & Generalization Analysis" in content:
+            content = content.split("## Robustness & Generalization Analysis")[0]
+        # Ensure it ends with a newline, then append
+        if not content.endswith("\n"):
+            content += "\n"
+        with open(val_path, "w", encoding="utf-8") as f:
+            f.write(content + loso_content)
+    else:
+        with open(val_path, "w", encoding="utf-8") as f:
+            f.write(loso_content)
         
-    print("[run_paper] Robustness analysis appended.")
+    print("[run_paper] Robustness analysis written successfully.")
     
     # Load summary files for the final block
     # 1. Digital Twin validations
@@ -229,7 +247,8 @@ def main():
     print(f"  MAE:              {full_fit_mae:.2f}% (digital twin) vs {twin_res['mae_paper_pct']:.2f}% (paper F-N)")
     print(f"  R^2 Score:        {r2_twin:.4f} (digital twin) vs {r2_table2:.4f} (paper Table 2)")
     print(f"  RMSE:             {rmse_twin:.1f} mJ (digital twin) vs {rmse_table2:.1f} mJ (paper Table 2)")
-    print(f"  Generalization:   LOSO MAE = {loso_mae:.2f}% (model generalizes)")
+    gen_status = "mild overfitting / parameter sensitivity" if (loso_mae - full_fit_mae) > 5.0 else "model generalizes"
+    print(f"  Generalization:   LOSO MAE = {loso_mae:.2f}% ({gen_status})")
     print("-" * 80)
     print("Surrogate Neural Net Generalization (Train vs Test R^2 Gap):")
     if surr_r2_gap:

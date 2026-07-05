@@ -4,7 +4,7 @@
   "pop": 512,
   "ensemble": 2,
   "steps": 60,
-  "seconds": 4.353863000869751,
+  "seconds": 4.806148529052734,
   "best_design": {
     "pump_power_w": 227.7080841064453,
     "crystal_length_cm": 4.386279106140137,

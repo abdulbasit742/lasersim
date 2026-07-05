@@ -4,7 +4,7 @@
   "params_m": 0.017733,
   "samples": 4000,
   "epochs_run": 8,
-  "seconds": 4.578686237335205,
+  "seconds": 4.332986116409302,
   "r2": {
     "output_energy_j": 0.9604564338363828,
     "pulse_duration_fs": 0.9602796177198563,

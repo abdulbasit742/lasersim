@@ -107,7 +107,7 @@ A deep residual Multi-Layer Perceptron (MLP) trained to act as a fast neural sur
 - **Training Device**: NVIDIA RTX A6000
 - **Training Dataset**: 4,000 samples generated from the physics model
 - **Epochs Trained**: 8 epochs (with early stopping)
-- **Training Time**: 4.6 seconds
+- **Training Time**: 4.3 seconds
 - **Model Size**: 0.02M parameters
 
 | Target Metric | R² Score | Mean Absolute Error (MAE) |
@@ -125,7 +125,7 @@ Results of gradient-based parallel inverse design optimization using autograd ba
 - **Execution Device**: NVIDIA RTX A6000
 - **Ensemble Size**: 2 neural models
 - **Population Size**: 512 parallel candidates
-- **Optimization Time**: 4.4 seconds
+- **Optimization Time**: 4.8 seconds
 
 ### Optimized Design Parameters
 
@@ -162,7 +162,7 @@ To verify that the model does not overfit to the 6 experimental stages, we perfo
 | AMP-3 GM4 | 0.99 | 1231.7 | 1280.0 | -3.8% |
 
 - **LOSO Mean Absolute Error (MAE):** 16.54%
-- **Generalization Wording:** The LOSO MAE (16.54%) is close to the full-fit MAE (10.88%), which demonstrates that the model generalizes robustly and does not suffer from overfitting.
+- **Generalization Wording:** The LOSO MAE (16.54%) is higher than the full-fit MAE (10.88%) by 5.66 percentage points, indicating mild overfitting / parameter sensitivity.
 
 ### Second-System Sanity Check Analysis
 We evaluated other published systems from the laser landscape (e.g., Kornev et al. 2018, Yahia 2018) for transfer validation. However, these publications only report high-level metrics (e.g., final output energy, pulse duration, rep rate) and do not provide the detailed internal parameters necessary for MOPA chain simulation (such as input seed energy, stage-by-stage rod diameters, beam diameters, or diode pump energies per stage). Consequently, a quantitative second-system validation was skipped to prevent the unscientific fabrication of parameters.
