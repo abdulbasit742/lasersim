@@ -235,7 +235,7 @@ def main():
     md.append("")
     best_len = shg["best"]["length_mm"]
     best_green = shg["best"]["green_energy_j"]
-    md.append(f"- **Optimum Crystal Length**: {best_len} mm yielding **{best_green*1e3:.1f} mJ** of 532 nm green energy (conversion efficiency of {shg['best']['eff']*100:.1f}%)")
+    md.append(f"- **Optimum Crystal Length**: {best_len:.1f} mm yielding **{best_green*1e3:.1f} mJ** of 532 nm green energy (conversion efficiency of {shg['best']['eff']*100:.1f}%)")
     md.append("")
     md.append("#### SHG Conversion Curve")
     md.append("![SHG Conversion Curve](shg_curve.png)")

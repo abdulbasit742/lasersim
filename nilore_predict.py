@@ -82,48 +82,32 @@ def fsat_sensitivity(f_sat_values: Tuple[float, ...] = (0.3, 0.35, 0.4)) -> Dict
 # ------------------------------------------------------------------
 # 2) Predicted 532 nm second-harmonic energy from the 1.28 J output
 # ------------------------------------------------------------------
-import cmath
+import scipy.special
 
-def solve_shg_ode(L_mm: float, gamma_0: float, dk: float) -> float:
-    """Solve coupled equations for SHG:
-    du1/dz = - gamma_0 * conj(u1) * u2 * exp(i * dk * z)
-    du2/dz = gamma_0 * u1^2 * exp(-i * dk * z)
-    using RK4 method.
+def solve_shg_exact(L_mm: float, gamma_0: float, dk: float) -> float:
+    """Rigorous analytical plane-wave SHG with pump depletion and phase mismatch.
+    Uses Jacobi elliptic functions to solve Boyd's coupled-wave equations.
     """
     if L_mm <= 0.0:
         return 0.0
     L_m = L_mm * 1e-3
-    n_steps = 200
-    dz = L_m / n_steps
-    
-    u1 = 1.0 + 0j
-    u2 = 0.0 + 0j
-    
-    for i in range(n_steps):
-        z = i * dz
-        
-        def derivs(u1_val, u2_val, z_val):
-            d1 = -gamma_0 * u1_val.conjugate() * u2_val * cmath.exp(1j * dk * z_val)
-            d2 = gamma_0 * (u1_val ** 2) * cmath.exp(-1j * dk * z_val)
-            return d1, d2
-            
-        k1_1, k1_2 = derivs(u1, u2, z)
-        k2_1, k2_2 = derivs(u1 + 0.5 * dz * k1_1, u2 + 0.5 * dz * k1_2, z + 0.5 * dz)
-        k3_1, k3_2 = derivs(u1 + 0.5 * dz * k2_1, u2 + 0.5 * dz * k2_2, z + 0.5 * dz)
-        k4_1, k4_2 = derivs(u1 + dz * k3_1, u2 + dz * k3_2, z + dz)
-        
-        u1 += (dz / 6.0) * (k1_1 + 2 * k2_1 + 2 * k3_1 + k4_1)
-        u2 += (dz / 6.0) * (k1_2 + 2 * k2_2 + 2 * k3_2 + k4_2)
-        
-    return abs(u2) ** 2
+    delta = dk / (2.0 * gamma_0)
+    term = 2.0 + delta**2
+    disc = max(term**2 - 4.0, 0.0)
+    x_plus = 0.5 * (term + math.sqrt(disc))
+    x_minus = 0.5 * (term - math.sqrt(disc))
+    m = x_minus / x_plus
+    u = gamma_0 * L_m * math.sqrt(x_plus)
+    sn, _, _, _ = scipy.special.ellipj(u, m)
+    return x_minus * (sn ** 2)
 
 def predict_shg(fundamental_j: float = 1.280,
                 beam_diam_cm: float = 1.6,
                 pulse_fwhm_s: float = nt.PULSE_FWHM_S,
                 crystal_lengths_mm: Tuple[float, ...] = (0, 2, 4, 6, 8, 10, 12, 14, 15),
                 deff_pm_v: float = 3.9,
-                dk_m1: float = 55.0) -> Dict:
-    """Rigorous coupled-wave SHG conversion vs crystal length at the paper's peak intensity.
+                dk_m1: float = 75.0) -> Dict:
+    """Rigorous plane-wave SHG conversion vs crystal length at the paper's peak intensity.
 
     Accounts for pump depletion and phase-mismatch back-conversion.
     LBO-class deff ~ 3.9 pm/V.
@@ -138,7 +122,7 @@ def predict_shg(fundamental_j: float = 1.280,
     
     rows = []
     for L_mm in crystal_lengths_mm:
-        eff = solve_shg_ode(L_mm, gamma_0, dk_m1)
+        eff = solve_shg_exact(L_mm, gamma_0, dk_m1)
         rows.append({"length_mm": L_mm, "eff": eff,
                      "green_energy_j": fundamental_j * eff})
                      
@@ -147,7 +131,7 @@ def predict_shg(fundamental_j: float = 1.280,
     best_L = 0.0
     best_eff = 0.0
     for L_mm in sweep_L:
-        eff = solve_shg_ode(L_mm, gamma_0, dk_m1)
+        eff = solve_shg_exact(L_mm, gamma_0, dk_m1)
         if eff > best_eff:
             best_eff = eff
             best_L = L_mm

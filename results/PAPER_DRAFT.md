@@ -61,7 +61,7 @@ The twin's predictions vs. experimental data (Raza et al. 2025) are summarized i
 The performance is visually shown in the parity and per-stage error plots (`twin_parity.png` and `stage_error_bar.png`).
 
 ### 3.2 Second Harmonic Generation (SHG)
-Second harmonic conversion efficiency and green output energy vs. LBO doubling crystal length are plotted in `shg_curve.png`. The model predicts an optimum crystal length of 12.8 mm yielding **1061.8 mJ** of 532 nm energy from the 1.28 J fundamental (82.9% efficiency). With further crystal length increases, depletion-driven back-conversion causes a rollover in efficiency (e.g., dropping to 81.9% at 14 mm and 79.5% at 15 mm).
+Second harmonic conversion efficiency and green output energy vs. LBO doubling crystal length are plotted in `shg_curve.png`. The model predicts an optimum crystal length of 11.7 mm yielding **992.3 mJ** of 532 nm energy from the 1.28 J fundamental (77.5% efficiency). With further crystal length increases, depletion-driven back-conversion causes a rollover in efficiency (e.g., dropping to 72.9% at 14 mm and 67.9% at 15 mm).
 
 ---
 
