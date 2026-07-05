@@ -81,8 +81,8 @@ Second-harmonic generation predictions based on the 1.28 J fundamental output at
 
 Performance prediction of adding a 4th single-pass booster stage (AMP-4 GM5) using a 2.5 cm rod with 1.14 J stored energy, assuming the beam is expanded to 2.0 cm:
 
-- **Predicted Output Energy**: **1699.8 mJ** (injected: 1280 mJ, Gain: 1.33)
-- **B-integral (worst-case)**: 1.14 rad (SAFE)
+- **Predicted Output Energy**: **1571.9 mJ** (injected: 1167 mJ, Gain: 1.35)
+- **B-integral (worst-case)**: 1.05 rad (SAFE)
 
 ## B-integral-Optimal Beam Schedule
 
@@ -123,29 +123,29 @@ A deep residual Multi-Layer Perceptron (MLP) trained to act as a fast neural sur
 Results of gradient-based parallel inverse design optimization using autograd backpropagation through an ensemble of trained neural surrogates:
 
 - **Execution Device**: NVIDIA RTX A6000
-- **Ensemble Size**: 2 neural models
-- **Population Size**: 512 parallel candidates
-- **Optimization Time**: 5.3 seconds
+- **Ensemble Size**: 20 neural models
+- **Population Size**: 16,384 parallel candidates
+- **Optimization Time**: 0.0 seconds
 
 ### Optimized Design Parameters
 
 | Parameter | Optimized Value | Bound Range |
 | :--- | :---: | :---: |
-| Pump Power (W) | 227.71 W | 5.0 - 400.0 |
-| Crystal Length (cm) | 4.386 cm | 0.2 - 8.0 |
-| Seed Energy (nJ) | 3250.50 nJ | 0.1 - 5000.0 |
-| Residual GDD (fs²) | 48162.5 fs² | 0.0 - 60000.0 |
-| SHG Crystal Length (mm) | 11.110 mm | 0.0 - 20.0 |
+| Pump Power (W) | 240.36 W | 5.0 - 400.0 |
+| Crystal Length (cm) | 4.453 cm | 0.2 - 8.0 |
+| Seed Energy (nJ) | 3330.82 nJ | 0.1 - 5000.0 |
+| Residual GDD (fs²) | 24199.3 fs² | 0.0 - 60000.0 |
+| SHG Crystal Length (mm) | 12.558 mm | 0.0 - 20.0 |
 
 ### Target vs. Ensemble Predictions vs. Physics Check
 
 | Metric | Target Spec | Ensemble Surrogate Prediction | Physics Verification |
 | :--- | :---: | :---: | :---: |
-| Output Energy (J) | 6.0 µJ | 6.03 ± 0.25 µJ | 5.42 µJ |
-| Pulse Duration (fs) | N/A | 3331.0 ± 0.012 fs | 3330.9 fs |
-| M² Beam Quality | 1.10 | 1.100 ± 0.0002 | 1.094 |
-| SHG Efficiency | 1.0% | 0.99 ± 0.015% | 0.73% |
-| Peak Power (W) | 1.5 MW | 1.50 ± 0.01 MW | 1.53 MW |
+| Output Energy (J) | 6.0 µJ | 5.79 ± 0.04 µJ | 5.76 µJ |
+| Pulse Duration (fs) | N/A | 3330.7 ± 0.001 fs | 3330.7 fs |
+| M² Beam Quality | 1.10 | 1.100 ± 0.0004 | 1.100 |
+| SHG Efficiency | 1.0% | 1.00 ± 0.013% | 0.99% |
+| Peak Power (W) | 1.5 MW | 1.62 ± 0.01 MW | 1.63 MW |
 
 ## Robustness & Generalization Analysis
 

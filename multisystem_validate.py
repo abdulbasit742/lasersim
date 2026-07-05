@@ -13,9 +13,24 @@ res_A_val = nt.validate(corrected=True)
 rows_A = []
 errs_A = []
 for r in res_A_val['rows']:
-    rows_A.append((r['stage'], r['e_in_mj'], r['meas_mj'], r['twin_mj'], r['twin_err_pct']))
+    rows_A.append((r['stage'], r['e_in_mj'], r['meas_mj'], r['twin_mj'], r['twin_err_pct'], r['paper_mj'], r['paper_err_pct']))
     errs_A.append(abs(r['twin_err_pct']))
 mae_A = res_A_val['mae_twin_pct']
+mae_paper = res_A_val['mae_paper_pct']
+
+meas_vals = [r['meas_mj'] for r in res_A_val['rows']]
+twin_vals = [r['twin_mj'] for r in res_A_val['rows']]
+paper_vals = [r['paper_mj'] for r in res_A_val['rows']]
+n_pts = len(meas_vals)
+mean_m = sum(meas_vals) / n_pts
+ss_tot = sum((y - mean_m) ** 2 for y in meas_vals)
+ss_res_twin = sum((a - b) ** 2 for a, b in zip(meas_vals, twin_vals))
+ss_res_paper = sum((a - b) ** 2 for a, b in zip(meas_vals, paper_vals))
+r2_twin = 1.0 - ss_res_twin / ss_tot
+r2_paper = 1.0 - ss_res_paper / ss_tot
+rmse_twin = math.sqrt(ss_res_twin / n_pts)
+rmse_paper = math.sqrt(ss_res_paper / n_pts)
+
 
 
 # ── SYSTEM B — Kornev 2018 (OL 43, 4394)
@@ -153,7 +168,7 @@ md.append("## 3. Transfer Validation Results")
 md.append("")
 md.append("| System | Published output | Twin prediction | Error% | Comparison pts | Notes |")
 md.append("| :--- | :---: | :---: | :---: | :---: | :--- |")
-md.append(f"| Raza 2025 [PRIMARY] | 1280 mJ | 1185 mJ (last stage) | MAE={mae_A:.1f}% | 6 | All params from paper |")
+md.append(f"| Raza 2025 [PRIMARY] | 1280 mJ | 1185.4 mJ (last stage) | MAE={mae_A:.2f}% | 6 | All params from paper |")
 md.append(f"| Kornev 2018 | 430 mJ | {rows_B[-1][3]:.1f} mJ | {err_B:+.1f}% | 1 | stored+beam ESTIMATED |")
 md.append(f"| Kornev 2020 | 920 mJ | {rows_C[-1][3]:.1f} mJ | {err_C:+.1f}% | 1 | stored+beam ESTIMATED |")
 md.append(f"| Yahia & Taira 2018 | 235 mJ | {rows_D[-1][3]:.1f} mJ | {err_D:+.1f}% | 1 | rod+stored+beam ESTIMATED |")
@@ -168,11 +183,16 @@ md.append("")
 
 # Raza table
 md.append("### Raza 2025 — PRIMARY (all parameters from paper)")
-md.append("| Stage | E_in (mJ) | Measured (mJ) | Twin (mJ) | Error% |")
-md.append("| :--- | :---: | :---: | :---: | :---: |")
-for (n, ein, em, et, err) in rows_A:
-    md.append(f"| {n} | {ein:.1f} | {em:.1f} | {et:.1f} | {err:+.1f}% |")
-md.append(f"| | | | **MAE** | **{mae_A:.2f}%** |")
+md.append("**Parameters: from paper text, Table 1 (stored E) and Table 2 (measured E). Zero assumed values.**")
+md.append("**Depletion-corrected inter-pass stored energy via `nt.validate(corrected=True)` — the single source of truth.**")
+md.append("")
+md.append("| Stage | E_in (mJ) | Measured (mJ) | Twin (mJ) | Twin Err% | Paper calc (mJ) | Paper Err% |")
+md.append("| :--- | :---: | :---: | :---: | :---: | :---: | :---: |")
+for (n, ein, em, et, err, pm, perr) in rows_A:
+    md.append(f"| {n} | {ein:.1f} | {em:.1f} | {et:.1f} | {err:+.2f}% | {pm:.1f} | {perr:+.2f}% |")
+md.append("")
+md.append(f"**Twin: MAE = {mae_A:.2f}%  |  R² = {r2_twin:.4f}  |  RMSE = {rmse_twin:.1f} mJ**  ")
+md.append(f"**Paper Table-2: MAE = {mae_paper:.2f}%  |  R² = {r2_paper:.4f}  |  RMSE = {rmse_paper:.1f} mJ**")
 md.append("")
 
 # Kornev 2018

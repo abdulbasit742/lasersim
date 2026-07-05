@@ -143,7 +143,7 @@ def predict_shg(fundamental_j: float = 1.280,
 # ------------------------------------------------------------------
 # 3) Hypothetical AMP-4 booster extrapolation
 # ------------------------------------------------------------------
-def extrapolate_amp4(e_in_j: float = 1.280,
+def extrapolate_amp4(e_in_j: float = 1.1672,
                      beam_diam_cm: float = 2.0,
                      rod_diam_cm: float = 2.5,
                      stored_energy_j: float = 1.14,
