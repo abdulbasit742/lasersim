@@ -176,9 +176,12 @@ def main():
         md.append("Results of gradient-based parallel inverse design optimization using autograd backpropagation through an ensemble of trained neural surrogates:")
         md.append("")
         md.append(f"- **Execution Device**: {inv_info['device']}")
-        md.append(f"- **Ensemble Size**: {inv_info['ensemble_size']} neural models")
-        md.append(f"- **Population Size**: {inv_info['population']:,} parallel candidates")
-        md.append(f"- **Optimization Time**: {inv_info['opt_time_s']:.1f} seconds")
+        ensemble_size = inv_info.get('ensemble') or inv_info.get('ensemble_size') or 0
+        pop_size = inv_info.get('pop') or inv_info.get('population') or 0
+        opt_time = inv_info.get('seconds') or inv_info.get('opt_time_s') or 0.0
+        md.append(f"- **Ensemble Size**: {ensemble_size} neural models")
+        md.append(f"- **Population Size**: {pop_size:,} parallel candidates")
+        md.append(f"- **Optimization Time**: {opt_time:.1f} seconds")
         md.append("")
         md.append("### Optimized Design Parameters")
         md.append("")
@@ -215,40 +218,54 @@ def main():
         md.append("")
         md.append("| Metric | Target Spec | Ensemble Surrogate Prediction | Physics Verification |")
         md.append("| :--- | :---: | :---: | :---: |")
-        for key, stats in inv_info["metrics"].items():
-            t = stats["target"]
-            mean = stats["surrogate_mean"]
-            std = stats["surrogate_std"]
-            phys = stats["physics_check"]
-            
+        # Support both 'report' list format (new) and 'metrics' dict format (old)
+        rows = inv_info.get("report") or [
+            dict(metric=k, target=v["target"], surrogate=v["surrogate_mean"],
+                 surrogate_std=v["surrogate_std"], physics_check=v["physics_check"])
+            for k, v in inv_info.get("metrics", {}).items()
+        ]
+        for item in rows:
+            key = item["metric"]
+            t = item["target"]
+            mean = item["surrogate"]
+            std = item["surrogate_std"]
+            phys = item["physics_check"]
+            if t is None:
+                t_str = "N/A"
+            elif key == "output_energy_j":
+                t_str = f"{t*1e6:.1f} µJ"
+            elif key == "pulse_duration_fs":
+                t_str = f"{t:.1f} fs"
+            elif key == "m2":
+                t_str = f"{t:.2f}"
+            elif key == "shg_efficiency":
+                t_str = f"{t*100:.1f}%"
+            elif key == "peak_power_w":
+                t_str = f"{t/1e6:.1f} MW"
+            else:
+                t_str = f"{t:.4g}"
             if key == "output_energy_j":
                 name = "Output Energy (J)"
-                t_str = f"{t*1e6:.1f} µJ"
                 s_str = f"{mean*1e6:.2f} ± {std*1e6:.2f} µJ"
                 p_str = f"{phys*1e6:.2f} µJ"
             elif key == "pulse_duration_fs":
                 name = "Pulse Duration (fs)"
-                t_str = f"{t:.1f} fs"
                 s_str = f"{mean:.1f} ± {std:.3f} fs"
                 p_str = f"{phys:.1f} fs"
             elif key == "m2":
                 name = "M² Beam Quality"
-                t_str = f"{t:.2f}"
                 s_str = f"{mean:.3f} ± {std:.4f}"
                 p_str = f"{phys:.3f}"
             elif key == "shg_efficiency":
                 name = "SHG Efficiency"
-                t_str = f"{t*100:.1f}%"
                 s_str = f"{mean*100:.2f} ± {std*100:.3f}%"
                 p_str = f"{phys*100:.2f}%"
             elif key == "peak_power_w":
                 name = "Peak Power (W)"
-                t_str = f"{t/1e6:.1f} MW"
                 s_str = f"{mean/1e6:.2f} ± {std/1e6:.2f} MW"
                 p_str = f"{phys/1e6:.2f} MW"
             else:
                 name = key
-                t_str = f"{t:.4g}"
                 s_str = f"{mean:.4g} ± {std:.4g}"
                 p_str = f"{phys:.4g}"
             md.append(f"| {name} | {t_str} | {s_str} | {p_str} |")
