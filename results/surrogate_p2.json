@@ -1,0 +1,32 @@
+{
+  "ok": true,
+  "device": "NVIDIA RTX A6000",
+  "vram_gb": 48.0,
+  "params_m": 25.228293,
+  "samples": 1000000,
+  "shg_oversample_frac": 0.35,
+  "epochs_run": 60,
+  "seconds": 282.3068597316742,
+  "r2": {
+    "output_energy_j": 0.9999588002229559,
+    "pulse_duration_fs": 0.9999503188526695,
+    "m2": 0.9999824267145454,
+    "shg_efficiency": 0.9999130896781508,
+    "peak_power_w": 0.9999555337961658
+  },
+  "r2_train": {
+    "output_energy_j": 0.999958462350072,
+    "pulse_duration_fs": 0.9999507009951829,
+    "m2": 0.9999824985726647,
+    "shg_efficiency": 0.9999109946341271,
+    "peak_power_w": 0.999954556278973
+  },
+  "mae": {
+    "output_energy_j": 1.4856043565032452e-08,
+    "pulse_duration_fs": 0.0006310498046875,
+    "m2": 0.00014940730690956116,
+    "shg_efficiency": 5.566591686801985e-05,
+    "peak_power_w": 4309.181143125
+  },
+  "checkpoint": "results\\surrogate_p2.pt"
+}

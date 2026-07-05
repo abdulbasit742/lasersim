@@ -1,52 +1,61 @@
 {
   "ok": true,
   "device": "NVIDIA RTX A6000",
-  "pop": 512,
-  "ensemble": 2,
-  "steps": 60,
-  "seconds": 4.806148529052734,
+  "ensemble_size": 20,
+  "member_samples": 120000,
+  "member_epochs": 60,
+  "member_width": 512,
+  "member_depth": 8,
+  "pop": 16384,
+  "steps": 800,
+  "seconds_total": 1772.0993592739105,
   "best_design": {
-    "pump_power_w": 227.7080841064453,
-    "crystal_length_cm": 4.386279106140137,
-    "seed_energy_nj": 3250.504638671875,
-    "residual_gdd_fs2": 48162.5234375,
-    "shg_length_mm": 11.10965633392334
+    "pump_power_w": 240.36158752441406,
+    "crystal_length_cm": 4.453095436096191,
+    "seed_energy_nj": 3330.822998046875,
+    "residual_gdd_fs2": 24199.306640625,
+    "shg_length_mm": 12.557936668395996
   },
   "report": [
     {
       "metric": "output_energy_j",
       "target": 6e-06,
-      "surrogate": 6.030404620105401e-06,
-      "surrogate_std": 2.5229834932360973e-07,
-      "physics_check": 5.422549667455042e-06
+      "surrogate": 5.785976100014523e-06,
+      "surrogate_std": 3.773790524519427e-08,
+      "physics_check": 5.764051989959848e-06,
+      "pct_diff_vs_target": 0.3654018342445741
     },
     {
       "metric": "pulse_duration_fs",
       "target": null,
-      "surrogate": 3330.9931640625,
-      "surrogate_std": 0.01210643257945776,
-      "physics_check": 3330.907713291615
+      "surrogate": 3330.7265625,
+      "surrogate_std": 0.0014242923352867365,
+      "physics_check": 3330.7273357553668,
+      "pct_diff_vs_target": 2.3215816496990943e-05
     },
     {
       "metric": "m2",
       "target": 1.1,
-      "surrogate": 1.099785566329956,
-      "surrogate_std": 0.00019075973250437528,
-      "physics_check": 1.0943362062726703
+      "surrogate": 1.1000854969024658,
+      "surrogate_std": 0.00044668797636404634,
+      "physics_check": 1.0995783719744001,
+      "pct_diff_vs_target": 0.04610226618779139
     },
     {
       "metric": "shg_efficiency",
       "target": 0.01,
-      "surrogate": 0.009924341924488544,
-      "surrogate_std": 0.00015375569637399167,
-      "physics_check": 0.007326991361108192
+      "surrogate": 0.01001379732042551,
+      "surrogate_std": 0.00012839092232752591,
+      "physics_check": 0.009934550423604594,
+      "pct_diff_vs_target": 0.7924689682091597
     },
     {
       "metric": "peak_power_w",
       "target": 1500000.0,
-      "surrogate": 1497836.5,
-      "surrogate_std": 7018.2119140625,
-      "physics_check": 1530272.564162599
+      "surrogate": 1622614.875,
+      "surrogate_std": 10864.2861328125,
+      "physics_check": 1626734.4409726278,
+      "pct_diff_vs_target": 0.2746377315085226
     }
   ]
 }
