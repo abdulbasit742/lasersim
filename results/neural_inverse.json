@@ -1,52 +1,52 @@
 {
   "ok": true,
   "device": "NVIDIA RTX A6000",
-  "pop": 512,
-  "ensemble": 2,
-  "steps": 60,
-  "seconds": 10.025786638259888,
+  "pop": 16384,
+  "ensemble": 5,
+  "steps": 600,
+  "seconds": 1754.6110496520996,
   "best_design": {
-    "pump_power_w": 388.2934875488281,
-    "crystal_length_cm": 7.8379411697387695,
-    "seed_energy_nj": 4883.58544921875,
-    "residual_gdd_fs2": 46560.3203125,
-    "shg_length_mm": 9.398996353149414
+    "pump_power_w": 241.6421661376953,
+    "crystal_length_cm": 1.2482777833938599,
+    "seed_energy_nj": 4936.533203125,
+    "residual_gdd_fs2": 12164.23828125,
+    "shg_length_mm": 12.600807189941406
   },
   "report": [
     {
       "metric": "output_energy_j",
-      "target": 0.08,
-      "surrogate": 1.593543311173562e-05,
-      "surrogate_std": 9.203489526043995e-07,
-      "physics_check": 2.3222673028707668e-05
+      "target": 6e-06,
+      "surrogate": 5.783478627563454e-06,
+      "surrogate_std": 2.8611658819954755e-08,
+      "physics_check": 5.761584952406467e-06
     },
     {
       "metric": "pulse_duration_fs",
-      "target": 4000.0,
-      "surrogate": 3330.830322265625,
-      "surrogate_std": 0.01155764888972044,
-      "physics_check": 3330.8919266640196
+      "target": null,
+      "surrogate": 3330.681396484375,
+      "surrogate_std": 0.00128414377104491,
+      "physics_check": 3330.6818099858856
     },
     {
       "metric": "m2",
-      "target": 1.3,
-      "surrogate": 1.1442705392837524,
-      "surrogate_std": 0.007313836365938187,
-      "physics_check": 1.1608644448416574
+      "target": 1.1,
+      "surrogate": 1.0999946594238281,
+      "surrogate_std": 0.00026074808556586504,
+      "physics_check": 1.1001088973999023
     },
     {
       "metric": "shg_efficiency",
-      "target": 0.45,
-      "surrogate": 0.015632428228855133,
-      "surrogate_std": 0.0005522174178622663,
-      "physics_check": 0.022234422710858893
+      "target": 0.01,
+      "surrogate": 0.009996550157666206,
+      "surrogate_std": 4.1926450649043545e-05,
+      "physics_check": 0.009997925165492551
     },
     {
       "metric": "peak_power_w",
-      "target": null,
-      "surrogate": 4397007.5,
-      "surrogate_std": 348112.28125,
-      "physics_check": 6553593.790371898
+      "target": 1500000.0,
+      "surrogate": 1623460.125,
+      "surrogate_std": 3010.662109375,
+      "physics_check": 1626060.417727213
     }
   ]
 }

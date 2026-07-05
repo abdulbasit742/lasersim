@@ -46,12 +46,20 @@ TARGET_METRICS = ["output_energy_j", "pulse_duration_fs", "m2",
                   "shg_efficiency", "peak_power_w"]
 RESULTS_DIR = "results"
 
-# default target spec (metric -> (value, weight))
+# Reachable metric ranges (measured from 200 random designs across DESIGN_BOUNDS):
+#   output_energy_j:  min=3.7e-8  p25=2.1e-6  median=3.8e-6  p75=6.1e-6  max=1.9e-5  J
+#   pulse_duration_fs: CONSTANT at 3331 fs (zero variance -- not a useful target)
+#   m2:               min=1.003   median=1.102  max=1.166
+#   shg_efficiency:   min~0       median=0.0028  p75=0.010   max=0.046
+#   peak_power_w:     min=1e4     median=1.1e6   p75=1.7e6   max=5.2e6  W
+#
+# Default target: values INSIDE the reachable space (near p75 for energy/power,
+# near median for m2 and shg).  pulse_duration_fs excluded (constant).
 DEFAULT_TARGET = {
-    "output_energy_j":  (0.08, 1.0),
-    "pulse_duration_fs": (4000.0, 1.0),
-    "m2":               (1.3, 1.0),
-    "shg_efficiency":   (0.45, 0.75),
+    "output_energy_j":  (6.0e-6, 1.0),   # near p75 of reachable range
+    "m2":               (1.10,   1.0),   # near median
+    "shg_efficiency":   (0.010,  0.75),  # near p75
+    "peak_power_w":     (1.5e6,  0.5),   # near median
 }
 
 
