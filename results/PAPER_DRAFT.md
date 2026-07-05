@@ -236,10 +236,11 @@ We have presented a physically honest, open-source digital twin and neural surro
 
 ## References
 
-[1] N. Frantz and J. S. Nodvik, "Theory of Pulse Propagation in a Laser Amplifier," *J. Appl. Phys.* **34**, 2346 (1963).  
+[1] L. M. Frantz and J. S. Nodvik, "Theory of Pulse Propagation in a Laser Amplifier," *J. Appl. Phys.* **34**, 2346 (1963).  
 [2] W. Koechner, *Solid-State Laser Engineering*, 6th ed. (Springer, 2006), Ch. 4.  
 [3] K. Raza et al., "An all-diode pumped 1.28-Joule, 200-picosecond Nd:YAG laser amplifier at 10 Hz," *Optics Communications* **577**, 131413 (2025).  
 [4] R. W. Boyd, *Nonlinear Optics*, 3rd ed. (Academic Press, 2008), Ch. 2.  
 [5] M. H. Tahersima et al., "Deep Neural Network Inverse Design of Integrated Photonic Power Splitters," *Sci. Rep.* **9**, 1368 (2019).  
-[6] Z. Liu et al., "Tackling Photonics Inverse Design with Machine Learning," *Adv. Sci.* **8**, 2002923 (2021).  
+[6] Z. Liu et al., "Tackling Photonic Inverse Design with Machine Learning," *Adv. Sci.* **8**, 2002923 (2021).  
 [7] T. W. Hughes et al., "Adjoint Method and Inverse Design for Nonlinear Nanophotonic Devices," *ACS Photonics* **5**, 4781 (2018).
+
