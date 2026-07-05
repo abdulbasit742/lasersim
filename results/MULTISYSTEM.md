@@ -47,7 +47,7 @@ figure at the 110 A operating point (phi6.35mm: ~0.18 J; phi15mm: ~1.15 J).
 
 | System | Published output | Twin prediction | Error% | Comparison pts | Notes |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| Raza 2025 [PRIMARY] | 1280 mJ | 1185 mJ (last stage) | MAE=12.1% | 6 | All params from paper |
+| Raza 2025 [PRIMARY] | 1280 mJ | 1185.4 mJ (last stage) | MAE=10.88% | 6 | All params from paper |
 | Kornev 2018 | 430 mJ | 117.7 mJ | -72.6% | 1 | stored+beam ESTIMATED |
 | Kornev 2020 | 920 mJ | 235.9 mJ | -74.4% | 1 | stored+beam ESTIMATED |
 | Yahia & Taira 2018 | 235 mJ | 113.5 mJ | -51.7% | 1 | rod+stored+beam ESTIMATED |
@@ -60,15 +60,20 @@ figure at the 110 A operating point (phi6.35mm: ~0.18 J; phi15mm: ~1.15 J).
 ## 4. Per-System Stage Details
 
 ### Raza 2025 — PRIMARY (all parameters from paper)
-| Stage | E_in (mJ) | Measured (mJ) | Twin (mJ) | Error% |
-| :--- | :---: | :---: | :---: | :---: |
-| AMP-1 GM1 p1 | 15.0 | 70.0 | 69.1 | -1.3% |
-| AMP-1 GM1 p2 | 70.0 | 200.0 | 140.5 | -29.7% |
-| AMP-2 GM2 p1 | 140.0 | 470.0 | 404.4 | -13.9% |
-| AMP-2 GM2 p2 | 470.0 | 755.0 | 845.8 | +12.0% |
-| AMP-3 GM3 | 720.0 | 980.0 | 902.0 | -8.0% |
-| AMP-4 GM4 | 980.0 | 1280.0 | 1185.4 | -7.4% |
-| | | | **MAE** | **12.06%** |
+**Parameters: from paper text, Table 1 (stored E) and Table 2 (measured E). Zero assumed values.**
+**Depletion-corrected inter-pass stored energy via `nt.validate(corrected=True)` — the single source of truth.**
+
+| Stage | E_in (mJ) | Measured (mJ) | Twin (mJ) | Twin Err% | Paper calc (mJ) | Paper Err% |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| AMP-1 GM1 p1 | 15.0 | 70.0 | 69.1 | -1.26% | 122.0 | +74.29% |
+| AMP-1 GM1 p2 | 70.0 | 200.0 | 137.7 | -31.15% | 216.0 | +8.00% |
+| AMP-2 GM2 p1 | 140.0 | 470.0 | 404.4 | -13.95% | 561.0 | +19.36% |
+| AMP-2 GM2 p2 | 470.0 | 755.0 | 782.1 | +3.59% | 838.0 | +10.99% |
+| AMP-3 GM3 | 720.0 | 980.0 | 902.0 | -7.96% | 1006.0 | +2.65% |
+| AMP-3 GM4 | 980.0 | 1280.0 | 1185.4 | -7.39% | 1286.0 | +0.47% |
+
+**Twin: MAE = 10.88%  |  R² = 0.9779  |  RMSE = 63.2 mJ**  
+**Paper Table-2: MAE = 19.29%  |  R² = 0.9826  |  RMSE = 56.0 mJ**
 
 ### Kornev 2018 (two phi10mm x 140mm rods, 2-pass PA)
 _Parameters: seed=5 mJ (stated), phi10mm rods (stated), output=430 mJ (stated)._

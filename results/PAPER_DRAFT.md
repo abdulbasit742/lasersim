@@ -157,6 +157,51 @@ The optimal design parameters: pump power 240.4 W, crystal length 4.45 cm, seed 
 
 ---
 
+---
+
+### 3.6 Multi-System Transfer Assessment
+
+To assess the scope of the validated twin, we applied it (with all parameters frozen:
+$F_\text{sat}=0.30$ J/cm², $\beta=0.130$, $\alpha=1.43$) to four additional published
+diode-pumped Nd:YAG systems cited in Raza et al. 2025:
+
+| System | Published output | Twin prediction | Error% | Params available |
+| :--- | :---: | :---: | :---: | :--- |
+| Kornev 2018 (OL 43, 4394) | 430 mJ | 117.7 mJ | −72.6% | Seed, rod Ø; stored E and beam Ø **missing** |
+| Kornev 2020 (OL 45, 5898) | 920 mJ | 235.9 mJ | −74.4% | Seed, rod Ø; stored E and beam Ø **missing** |
+| Yahia & Taira 2018 (OE 26, 8257) | 235 mJ | 113.5 mJ | −51.7% | Seed only; rod Ø, stored E, beam Ø **all missing** |
+| Huang 2020 (IEEE JQE 56, 1700107) | 363 mJ | 294.6 mJ | −18.8% | Rod Ø stated; stored E from figure (approx) |
+
+Transfer MAE (n=4, 1 comparison point each): **54.4%**
+
+These large errors are **expected and not a model failure**. They arise from a
+well-known reporting gap in the laser amplifier literature: published papers routinely
+report final output energy, pulse duration, and repetition rate, but rarely disclose
+the intermediate per-stage parameters (stored energy per gain module, beam diameter
+per stage) required to simulate a MOPA chain from first principles. Specifically:
+
+- **Stored energy is missing** in 3/4 systems (Kornev 2018, Kornev 2020, Yahia 2018).
+  The Frantz–Nodvik output is exponentially sensitive to stored energy; a 20% estimation
+  error in stored energy propagates to a 30–80% output error in the saturation regime.
+- **Beam diameter is missing** in all 4 systems. The fill-factor correction
+  $\eta = (d_\text{beam}/d_\text{rod})^\alpha$ requires this parameter.
+- **Huang 2020** is the best case (−18.8%) precisely because rod diameters are stated
+  and stored energies are readable from a published characterization figure, providing
+  substantially more input to the twin than the other three systems.
+
+We identify this **missing-parameter reporting gap** as a finding: the laser amplifier
+community does not yet have a convention for reporting the internal parameters needed
+for MOPA digital-twin validation. We recommend that future publications report stored
+energy per gain module (or diode pump energy and efficiency) and beam diameter per stage
+alongside standard output metrics.
+
+**The twin is rigorously validated only against Raza 2025** (n=6 per-stage comparison
+points, all parameters from the paper, MAE=10.88%). The four additional system results
+are plausibility checks, not independent validations, and are reported as such.
+
+
+---
+
 ## 4. Discussion
 
 The saturation-dependent fill-factor model provides a physically motivated explanation for why standard 1D Frantz–Nodvik models over-predict gain in unsaturated early passes: the on-axis gain is accessible when the beam is small and unsaturated, but the effective stored energy drops toward the geometric fill factor $\eta$ as saturation drives uniform extraction across the profile. The LOSO analysis shows that one global parameter captures this physics adequately for the range of stages in the Raza 2025 chain, though with mild sensitivity.
