@@ -1,14 +1,14 @@
 # An Open-Source Physics-Constrained Digital Twin and Neural Surrogate for Nd:YAG Laser Amplifiers
 
 **Authors:** Abdul Basit et al.  
-**Affiliation:** National Institute of Lasers and Optronics (NILORE) / PIEAS, Islamabad, Pakistan  
+**Affiliation:** National Institute of Lasers and Ontronics (NILORE) / PIEAS, Islamabad, Pakistan  
 **Target:** Journal of Laser Applications / Optics Communications  
 **Reference Paper:** K. Raza et al., "An all-diode pumped 1.28-Joule, 200-picosecond Nd:YAG laser amplifier at 10 Hz", *Optics Communications* 577 (2025) 131413.
 
 ---
 
 ## Abstract
-We present an open-source, physics-constrained digital twin and deep neural surrogate engine for multi-pass Nd:YAG laser amplifier chains, calibrated against the experimental data of Raza et al. (2025). By introducing a saturation-dependent beam-fill-factor gain-access correction and modeling multi-pass energy depletion, our digital twin reproduces the experimental chain energies with a Mean Absolute Error (MAE) of **10.88%** and $R^2 = 0.9926$, matching and outperforming the paper's own Table 2 calculated model (MAE 19.29%, $R^2 = 0.9904$) under the strict physical constraint of $F_{\text{sat}} = 0.3\text{ J/cm}^2$. We train an 8-layer residual neural network surrogate on 300,000 physical samples to map laser parameters to output performance, achieving $R^2 > 0.999$ across all metrics. Finally, we leverage this surrogate within a differentiable ensemble optimization loop on an NVIDIA RTX A6000 GPU to perform gradient-based inverse design of high-power amplifier chains in under 10 seconds.
+We present an open-source, physics-constrained digital twin and deep neural surrogate engine for multi-pass Nd:YAG laser amplifier chains, calibrated against the experimental data of Raza et al. (2025). By introducing a saturation-dependent beam-fill-factor gain-access correction and modeling multi-pass energy depletion, our digital twin reproduces the experimental chain energies with a Mean Absolute Error (MAE) of **10.88%** under the strict physical constraint of $F_{\text{sat}} = 0.3\text{ J/cm}^2$. The digital twin matches the overall statistical accuracy of the paper's own Table 2 calculated model (twin $R^2 = 0.978$, RMSE = $63.2\text{ mJ}$ vs. paper $R^2 = 0.983$, RMSE = $56.0\text{ mJ}$) but achieves this with no hidden parameters. We train an 8-layer residual neural network surrogate on 300,000 physical samples to map laser parameters to output performance, achieving $R^2 > 0.999$ across all metrics. Finally, we leverage this surrogate within a differentiable ensemble optimization loop on an NVIDIA RTX A6000 GPU to perform gradient-based inverse design of high-power amplifier chains in under 10 seconds.
 
 ---
 
@@ -54,18 +54,18 @@ The twin's predictions vs. experimental data (Raza et al. 2025) are summarized i
 | AMP-3 GM4 | 980.0 | 1280.0 | 1286.0 | 1185.4 | -7.4% | 1.24 |
 
 #### Statistical Performance:
-*   **Paper Frantz-Nodvik Baseline (no fill-factor, F_sat=0.3):** MAE = 44.47%, $R^2 = 0.9658$, RMSE = 111.4 mJ
-*   **Paper Table 2 Calculated (Raza et al. 2025):** MAE = 19.29%, $R^2 = 0.9904$, RMSE = 53.0 mJ
-*   **Corrected Digital Twin:** MAE = **10.88%**, $R^2 = \mathbf{0.9926}$, RMSE = **46.5 mJ**
+*   **Paper Frantz-Nodvik Baseline (no fill-factor, F_sat=0.3):** MAE = 44.47%, $R^2 = 0.8962$, RMSE = 137.0 mJ
+*   **Paper Table 2 Calculated (Raza et al. 2025):** MAE = 19.29%, $R^2 = 0.9826$, RMSE = 56.0 mJ
+*   **Corrected Digital Twin:** MAE = **10.88%**, $R^2 = 0.9779$, RMSE = 63.2 mJ
 
 The performance is visually shown in the parity and per-stage error plots (`twin_parity.png` and `stage_error_bar.png`).
 
 ### 3.2 Second Harmonic Generation (SHG)
-Second harmonic conversion efficiency and green output energy vs. LBO doubling crystal length are plotted in `shg_curve.png`. The model predicts an optimum crystal length of 12 mm yielding **1088 mJ** of 532 nm energy from the 1.28 J fundamental (85.0% efficiency).
+Second harmonic conversion efficiency and green output energy vs. LBO doubling crystal length are plotted in `shg_curve.png`. The model predicts an optimum crystal length of 10 mm yielding **1115 mJ** of 532 nm energy from the 1.28 J fundamental (87.1% efficiency). With further crystal length increases, depletion-driven back-conversion causes a rollover in efficiency (e.g., dropping to 84.8% at 12 mm and 57.2% at 15 mm).
 
 ---
 
 ## 4. Discussion, Limitations, & Reproducibility
-The digital twin matches the paper's accuracy with no hidden parameters, keeping $F_{\text{sat}}$ locked at $0.3\text{ J/cm}^2$. 
+The digital twin matches the paper's overall statistical accuracy with no hidden parameters, keeping $F_{\text{sat}}$ locked at $0.3\text{ J/cm}^2$. 
 *   **Limitations:** The current twin models 1D transverse profiles and does not include 3D wavefront aberrations or thermal lensing analysis.
 *   **Reproducibility:** The code runs in a clean venv and includes validation scripts (`results_nilore.py`) which automate the statistics and plot generation. All source files are available at: `github.com/abdulbasit742/lasersim`.

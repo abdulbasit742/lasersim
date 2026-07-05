@@ -21,11 +21,11 @@ The physical shape parameters are: concentration exponent (α = 1.43) and satura
 
 | Model Version | Mean Absolute Error (MAE) | R² Score | RMSE (mJ) |
 | :--- | :---: | :---: | :---: |
-| Paper Frantz-Nodvik Model (no fill-factor, F_sat=0.3) | 44.47% | 0.9826 | 56.0 mJ |
+| Paper Frantz-Nodvik Model (no fill-factor, F_sat=0.3) | 44.47% | 0.8962 | 137.0 mJ |
 | Paper Table 2 Calculated (Raza et al. 2025) | 19.29% | 0.9826 | 56.0 mJ |
 | Corrected Digital Twin (F_sat=0.3) | 10.88% | 0.9779 | 63.2 mJ |
 
-✓ **Status**: The corrected digital twin successfully beats the paper's own Table 2 calculated model on MAE (10.9% vs 19.3%), R² (0.9779 vs 0.9826), and RMSE (63.2 mJ vs 56.0 mJ) — without any hidden fudge factors.
+**Status**: The corrected digital twin matches the paper's calculated model's overall statistical accuracy (comparable R²=0.978 vs 0.983 and RMSE=63.2 mJ vs 56.0 mJ) while reducing the per-stage mean absolute error (MAE) from 19.29% to 10.88% — all under the strict constraint of F_sat = 0.3 J/cm² without any hidden parameters.
 
 ### Validation Performance Plots
 
@@ -62,14 +62,15 @@ Second-harmonic generation predictions based on the 1.28 J fundamental output at
 
 | Crystal Length (mm) | Conversion Efficiency (%) | Green Energy (mJ) |
 | :---: | :---: | :---: |
-| 2 | 8.2% | 104.4 |
-| 4 | 27.9% | 357.1 |
-| 6 | 50.0% | 640.1 |
-| 8 | 68.2% | 873.2 |
-| 10 | 80.9% | 1035.4 |
-| 12 | 85.0% | 1088.0 |
+| 2 | 7.4% | 94.5 |
+| 4 | 27.0% | 346.2 |
+| 6 | 52.4% | 670.7 |
+| 8 | 74.9% | 959.2 |
+| 10 | 87.1% | 1114.8 |
+| 12 | 84.8% | 1085.3 |
+| 14 | 68.8% | 880.7 |
 
-- **Optimum Crystal Length**: 12 mm yielding **1088.0 mJ** of 532 nm green energy (conversion efficiency of 85.0%)
+- **Optimum Crystal Length**: 10 mm yielding **1114.8 mJ** of 532 nm green energy (conversion efficiency of 87.1%)
 
 #### SHG Conversion Curve
 ![SHG Conversion Curve](shg_curve.png)

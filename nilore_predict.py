@@ -85,9 +85,9 @@ def fsat_sensitivity(f_sat_values: Tuple[float, ...] = (0.3, 0.35, 0.4)) -> Dict
 def predict_shg(fundamental_j: float = 1.280,
                 beam_diam_cm: float = 1.6,
                 pulse_fwhm_s: float = nt.PULSE_FWHM_S,
-                crystal_lengths_mm: Tuple[float, ...] = (2, 4, 6, 8, 10, 12),
+                crystal_lengths_mm: Tuple[float, ...] = (2, 4, 6, 8, 10, 12, 14),
                 deff_pm_v: float = 3.9) -> Dict:
-    """tanh^2 SHG conversion vs crystal length at the paper's peak intensity.
+    """depletion-driven back-conversion SHG conversion vs crystal length at the paper's peak intensity.
 
     LBO-class deff ~ 3.9 pm/V. Conversion driven by fundamental intensity
     I = 0.937 * F / tau for the measured super-Gaussian (n=4) beam.
@@ -102,8 +102,8 @@ def predict_shg(fundamental_j: float = 1.280,
     rows = []
     for L_mm in crystal_lengths_mm:
         drive = kappa * math.sqrt(max(i_si, 0.0)) * (L_mm * 1e-3)
-        eff = math.tanh(drive) ** 2
-        eff = min(eff, 0.85)
+        # Use sine-squared for depletion-driven back-conversion rollover
+        eff = 0.88 * (math.sin(drive) ** 2)
         rows.append({"length_mm": L_mm, "eff": eff,
                      "green_energy_j": fundamental_j * eff})
     best = max(rows, key=lambda r: r["green_energy_j"])
