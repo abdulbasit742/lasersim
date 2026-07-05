@@ -193,16 +193,20 @@ def train(samples=200_000, epochs=200, width=512, depth=6, batch=4096,
     if best_state is not None:
         net.load_state_dict(best_state)
 
-    # test-set metrics in original units
+    # train vs test metrics in original units
     net.eval()
     with torch.no_grad():
         pred = (net(X_t[te].to(device)).cpu() * y_std + y_mean)
         true = (Y_t[te] * y_std + y_mean)
-    r2, mae = {}, {}
+        pred_tr = (net(X_t[tr].to(device)).cpu() * y_std + y_mean)
+        true_tr = (Y_t[tr] * y_std + y_mean)
+    r2, mae, r2_train = {}, {}, {}
     for j, name in enumerate(TARGET_METRICS):
         yt = true[:, j].tolist(); yp = pred[:, j].tolist()
         r2[name] = _r2(yt, yp)
         mae[name] = sum(abs(a - b) for a, b in zip(yt, yp)) / len(yt)
+        yt_tr = true_tr[:, j].tolist(); yp_tr = pred_tr[:, j].tolist()
+        r2_train[name] = _r2(yt_tr, yp_tr)
 
     # save checkpoint + normalization
     torch.save({"state_dict": net.state_dict(),
@@ -217,11 +221,11 @@ def train(samples=200_000, epochs=200, width=512, depth=6, batch=4096,
     elapsed = time.time() - t0
     print(f"[train_surrogate] done in {elapsed:.1f}s on {gpu_name}")
     for name in TARGET_METRICS:
-        print(f"    R^2[{name:18s}] = {r2[name]:.4f}   MAE = {mae[name]:.4g}")
+        print(f"    R^2[{name:18s}] = {r2[name]:.6f} (test) vs {r2_train[name]:.6f} (train)   MAE = {mae[name]:.4g}")
 
     summary = {"ok": True, "device": gpu_name, "params_m": n_params / 1e6,
                "samples": samples, "epochs_run": len(hist["train"]),
-               "seconds": elapsed, "r2": r2, "mae": mae,
+               "seconds": elapsed, "r2": r2, "r2_train": r2_train, "mae": mae,
                "checkpoint": CKPT, "plots": plotted}
     with open(os.path.join(RESULTS_DIR, "surrogate_net.json"), "w") as fh:
         json.dump({k: v for k, v in summary.items() if k != "plots"}, fh, indent=2)

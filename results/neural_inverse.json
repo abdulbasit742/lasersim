@@ -1,52 +1,52 @@
 {
   "ok": true,
   "device": "NVIDIA RTX A6000",
-  "pop": 16384,
-  "ensemble": 5,
-  "steps": 600,
-  "seconds": 1754.6110496520996,
+  "pop": 512,
+  "ensemble": 2,
+  "steps": 60,
+  "seconds": 4.353863000869751,
   "best_design": {
-    "pump_power_w": 241.6421661376953,
-    "crystal_length_cm": 1.2482777833938599,
-    "seed_energy_nj": 4936.533203125,
-    "residual_gdd_fs2": 12164.23828125,
-    "shg_length_mm": 12.600807189941406
+    "pump_power_w": 227.7080841064453,
+    "crystal_length_cm": 4.386279106140137,
+    "seed_energy_nj": 3250.504638671875,
+    "residual_gdd_fs2": 48162.5234375,
+    "shg_length_mm": 11.10965633392334
   },
   "report": [
     {
       "metric": "output_energy_j",
       "target": 6e-06,
-      "surrogate": 5.783478627563454e-06,
-      "surrogate_std": 2.8611658819954755e-08,
-      "physics_check": 5.761584952406467e-06
+      "surrogate": 6.030404620105401e-06,
+      "surrogate_std": 2.5229834932360973e-07,
+      "physics_check": 5.422549667455042e-06
     },
     {
       "metric": "pulse_duration_fs",
       "target": null,
-      "surrogate": 3330.681396484375,
-      "surrogate_std": 0.00128414377104491,
-      "physics_check": 3330.6818099858856
+      "surrogate": 3330.9931640625,
+      "surrogate_std": 0.01210643257945776,
+      "physics_check": 3330.907713291615
     },
     {
       "metric": "m2",
       "target": 1.1,
-      "surrogate": 1.0999946594238281,
-      "surrogate_std": 0.00026074808556586504,
-      "physics_check": 1.1001088973999023
+      "surrogate": 1.099785566329956,
+      "surrogate_std": 0.00019075973250437528,
+      "physics_check": 1.0943362062726703
     },
     {
       "metric": "shg_efficiency",
       "target": 0.01,
-      "surrogate": 0.009996550157666206,
-      "surrogate_std": 4.1926450649043545e-05,
-      "physics_check": 0.009997925165492551
+      "surrogate": 0.009924341924488544,
+      "surrogate_std": 0.00015375569637399167,
+      "physics_check": 0.007326991361108192
     },
     {
       "metric": "peak_power_w",
       "target": 1500000.0,
-      "surrogate": 1623460.125,
-      "surrogate_std": 3010.662109375,
-      "physics_check": 1626060.417727213
+      "surrogate": 1497836.5,
+      "surrogate_std": 7018.2119140625,
+      "physics_check": 1530272.564162599
     }
   ]
 }

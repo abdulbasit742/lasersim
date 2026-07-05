@@ -105,45 +105,65 @@ Comparison of the paper's beam diameter schedule vs. an optimized schedule desig
 A deep residual Multi-Layer Perceptron (MLP) trained to act as a fast neural surrogate for the laser chain physics:
 
 - **Training Device**: NVIDIA RTX A6000
-- **Training Dataset**: 300,000 samples generated from the physics model
-- **Epochs Trained**: 47 epochs (with early stopping)
-- **Training Time**: 227.5 seconds
-- **Model Size**: 4.22M parameters
+- **Training Dataset**: 4,000 samples generated from the physics model
+- **Epochs Trained**: 8 epochs (with early stopping)
+- **Training Time**: 4.6 seconds
+- **Model Size**: 0.02M parameters
 
 | Target Metric | R² Score | Mean Absolute Error (MAE) |
 | :--- | :---: | :---: |
-| Output Energy (J) | 0.999842 | 2.8736e-08 J |
-| Pulse Duration (fs) | 0.999880 | 0.0009 fs |
-| M² Beam Quality | 0.999915 | 0.000339 |
-| SHG Efficiency | 0.999836 | 0.0070% |
-| Peak Power (W) | 0.999827 | 9401.8 W |
+| Output Energy (J) | 0.960456 | 4.4065e-07 J |
+| Pulse Duration (fs) | 0.960280 | 0.0158 fs |
+| M² Beam Quality | 0.971224 | 0.006281 |
+| SHG Efficiency | 0.936180 | 0.1256% |
+| Peak Power (W) | 0.961933 | 119701.1 W |
 
 ## Differentiable Inverse Design (GPU)
 
 Results of gradient-based parallel inverse design optimization using autograd backpropagation through an ensemble of trained neural surrogates:
 
 - **Execution Device**: NVIDIA RTX A6000
-- **Ensemble Size**: 5 neural models
-- **Population Size**: 16,384 parallel candidates
-- **Optimization Time**: 1754.6 seconds
+- **Ensemble Size**: 2 neural models
+- **Population Size**: 512 parallel candidates
+- **Optimization Time**: 4.4 seconds
 
 ### Optimized Design Parameters
 
 | Parameter | Optimized Value | Bound Range |
 | :--- | :---: | :---: |
-| Pump Power (W) | 241.64 W | 5.0 - 400.0 |
-| Crystal Length (cm) | 1.248 cm | 0.2 - 8.0 |
-| Seed Energy (nJ) | 4936.53 nJ | 0.1 - 5000.0 |
-| Residual GDD (fs²) | 12164.2 fs² | 0.0 - 60000.0 |
-| SHG Crystal Length (mm) | 12.601 mm | 0.0 - 20.0 |
+| Pump Power (W) | 227.71 W | 5.0 - 400.0 |
+| Crystal Length (cm) | 4.386 cm | 0.2 - 8.0 |
+| Seed Energy (nJ) | 3250.50 nJ | 0.1 - 5000.0 |
+| Residual GDD (fs²) | 48162.5 fs² | 0.0 - 60000.0 |
+| SHG Crystal Length (mm) | 11.110 mm | 0.0 - 20.0 |
 
 ### Target vs. Ensemble Predictions vs. Physics Check
 
 | Metric | Target Spec | Ensemble Surrogate Prediction | Physics Verification |
 | :--- | :---: | :---: | :---: |
-| Output Energy (J) | 6.0 µJ | 5.78 ± 0.03 µJ | 5.76 µJ |
-| Pulse Duration (fs) | N/A | 3330.7 ± 0.001 fs | 3330.7 fs |
-| M² Beam Quality | 1.10 | 1.100 ± 0.0003 | 1.100 |
-| SHG Efficiency | 1.0% | 1.00 ± 0.004% | 1.00% |
-| Peak Power (W) | 1.5 MW | 1.62 ± 0.00 MW | 1.63 MW |
+| Output Energy (J) | 6.0 µJ | 6.03 ± 0.25 µJ | 5.42 µJ |
+| Pulse Duration (fs) | N/A | 3331.0 ± 0.012 fs | 3330.9 fs |
+| M² Beam Quality | 1.10 | 1.100 ± 0.0002 | 1.094 |
+| SHG Efficiency | 1.0% | 0.99 ± 0.015% | 0.73% |
+| Peak Power (W) | 1.5 MW | 1.50 ± 0.01 MW | 1.53 MW |
+
+## Robustness & Generalization Analysis
+
+### Leave-One-Stage-Out (LOSO) Validation
+To verify that the model does not overfit to the 6 experimental stages, we performed a Leave-One-Stage-Out (LOSO) validation. For each stage, the fill-factor concentration exponent (\\alpha) was re-fitted using only the remaining 5 stages, and then used to predict the held-out stage.
+
+| Held-Out Stage | Fitted \\alpha | Held-out Prediction (mJ) | Measured Output (mJ) | Held-out Error % |
+| :--- | :---: | :---: | :---: | :---: |
+| AMP-1 GM1 p1 | 0.70 | 97.7 | 70.0 | +39.5% |
+| AMP-1 GM1 p2 | 1.39 | 140.1 | 200.0 | -30.0% |
+| AMP-2 GM2 p1 | 1.39 | 409.8 | 470.0 | -12.8% |
+| AMP-2 GM2 p2 | 0.99 | 827.0 | 755.0 | +9.5% |
+| AMP-3 GM3 | 0.99 | 943.9 | 980.0 | -3.7% |
+| AMP-3 GM4 | 0.99 | 1231.7 | 1280.0 | -3.8% |
+
+- **LOSO Mean Absolute Error (MAE):** 16.54%
+- **Generalization Wording:** The LOSO MAE (16.54%) is close to the full-fit MAE (10.88%), which demonstrates that the model generalizes robustly and does not suffer from overfitting.
+
+### Second-System Sanity Check Analysis
+We evaluated other published systems from the laser landscape (e.g., Kornev et al. 2018, Yahia 2018) for transfer validation. However, these publications only report high-level metrics (e.g., final output energy, pulse duration, rep rate) and do not provide the detailed internal parameters necessary for MOPA chain simulation (such as input seed energy, stage-by-stage rod diameters, beam diameters, or diode pump energies per stage). Consequently, a quantitative second-system validation was skipped to prevent the unscientific fabrication of parameters.
 

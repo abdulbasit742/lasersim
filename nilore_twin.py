@@ -102,7 +102,7 @@ def small_signal_gain(f_store: float, f_sat: float) -> float:
 
 
 def simulate_stage(st: Stage, corrected: bool = True, f_sat: float = F_SAT,
-                   stored_override_j: Optional[float] = None) -> Dict[str, float]:
+                   stored_override_j: Optional[float] = None, alpha: float = 1.43) -> Dict[str, float]:
     """Predict a single pass. Fluences on the beam area; stored fluence on the
     rod area. If corrected=True, applies the beam-fill-factor gain-access correction."""
     a_beam = st.beam_area_cm2()
@@ -112,8 +112,8 @@ def simulate_stage(st: Stage, corrected: bool = True, f_sat: float = F_SAT,
     
     # Beam fill factor correction
     if corrected:
-        # We use alpha = 1.43 to account for the peaked gain distribution at the center of diode-pumped rod amplifiers
-        eta = min((st.beam_diam_cm / st.rod_diam_cm) ** 1.43, 1.0)
+        # We use alpha to account for the peaked gain distribution at the center of diode-pumped rod amplifiers
+        eta = min((st.beam_diam_cm / st.rod_diam_cm) ** alpha, 1.0)
         # Saturation-dependent fill-factor interpolation:
         s = f_in / f_sat
         eta_eff = eta + (1.0 - eta) * math.exp(-s / BETA_SAT)
@@ -173,7 +173,7 @@ def calibrate_fsat(corrected: bool = True, lo: float = 0.15, hi: float = 0.6) ->
     return best_f
 
 
-def validate(corrected: bool = True, f_sat: Optional[float] = None) -> Dict:
+def validate(corrected: bool = True, f_sat: Optional[float] = None, alpha: float = 1.43) -> Dict:
     """Run the full chain, report twin vs measured vs paper, plus B-integral.
     F_sat defaults to F_SAT (=F_SAT_PAPER=0.3 J/cm^2).  The only fitted
     mechanism is the beam-fill-factor correction (eta exponent 1.43)."""
@@ -192,7 +192,7 @@ def validate(corrected: bool = True, f_sat: Optional[float] = None) -> Dict:
             # Deplete the stored energy by the previous pass's extraction
             stored_override = max(st.stored_energy_j - extractions[gm_name], 0.0)
             
-        r = simulate_stage(st, corrected=corrected, f_sat=fs, stored_override_j=stored_override)
+        r = simulate_stage(st, corrected=corrected, f_sat=fs, stored_override_j=stored_override, alpha=alpha)
         e = r["e_out_j"]
         
         if gm_name:

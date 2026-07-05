@@ -1,23 +1,30 @@
 {
   "ok": true,
   "device": "NVIDIA RTX A6000",
-  "params_m": 4.217349,
-  "samples": 300000,
-  "epochs_run": 47,
-  "seconds": 227.50740909576416,
+  "params_m": 0.017733,
+  "samples": 4000,
+  "epochs_run": 8,
+  "seconds": 4.578686237335205,
   "r2": {
-    "output_energy_j": 0.9998415683060434,
-    "pulse_duration_fs": 0.9998796781448579,
-    "m2": 0.9999152548227879,
-    "shg_efficiency": 0.9998357698119181,
-    "peak_power_w": 0.9998269951401384
+    "output_energy_j": 0.9604564338363828,
+    "pulse_duration_fs": 0.9602796177198563,
+    "m2": 0.9712239815382911,
+    "shg_efficiency": 0.9361801979859513,
+    "peak_power_w": 0.9619328805204842
+  },
+  "r2_train": {
+    "output_energy_j": 0.9458978417011916,
+    "pulse_duration_fs": 0.9560071691728758,
+    "m2": 0.9708459242649626,
+    "shg_efficiency": 0.9030537031269092,
+    "peak_power_w": 0.9472364793288907
   },
   "mae": {
-    "output_energy_j": 2.8736230698693057e-08,
-    "pulse_duration_fs": 0.0009368326822916667,
-    "m2": 0.00033852914571762087,
-    "shg_efficiency": 7.03933680197224e-05,
-    "peak_power_w": 9401.7664125
+    "output_energy_j": 4.4064563553547487e-07,
+    "pulse_duration_fs": 0.01580322265625,
+    "m2": 0.006280919313430786,
+    "shg_efficiency": 0.0012558766081929207,
+    "peak_power_w": 119701.0575
   },
   "checkpoint": "results\\surrogate_net.pt"
 }
