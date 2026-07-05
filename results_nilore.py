@@ -120,26 +120,9 @@ def main():
     
     # --- Plot 3: results/shg_curve.png ---
     L_curve = np.linspace(0, 15, 150)
-    fundamental_j = 1.280
-    pulse_fwhm_s = 200e-12
-    beam_diam_cm = 1.6
-    w = beam_diam_cm / 2.0
-    f_peak = (2.0 ** (2.0 / 4)) * fundamental_j / (np.pi * w * w)
-    i_peak = 0.937 * f_peak / pulse_fwhm_s
-    i_si = i_peak * 1e4
-    kappa = 5.8e-6 * 3.9
-    
-    eff_curve = []
-    green_curve = []
-    for L_mm in L_curve:
-        drive = kappa * np.sqrt(max(i_si, 0.0)) * (L_mm * 1e-3)
-        # Use sine-squared for depletion-driven back-conversion rollover
-        eff = 0.88 * (np.sin(drive) ** 2)
-        eff_curve.append(eff)
-        green_curve.append(fundamental_j * eff)
-        
-    eff_curve = np.array(eff_curve)
-    green_curve = np.array(green_curve)
+    shg_curve_data = predict_shg(crystal_lengths_mm=tuple(L_curve))
+    eff_curve = np.array([r["eff"] for r in shg_curve_data["rows"]])
+    green_curve = np.array([r["green_energy_j"] for r in shg_curve_data["rows"]])
     
     fig, ax1 = plt.subplots(figsize=(7, 5))
     color = '#2ecc71'
@@ -159,7 +142,7 @@ def main():
     opt_eff = shg["best"]["eff"]
     opt_green = shg["best"]["green_energy_j"]
     ax1.plot(opt_L, opt_eff * 100, 'ro', markersize=8)
-    ax1.annotate(f'Optimum: {opt_L:.0f} mm\nEfficiency: {opt_eff*100:.1f}%\nEnergy: {opt_green*1000:.0f} mJ',
+    ax1.annotate(f'Optimum: {opt_L:.1f} mm\nEfficiency: {opt_eff*100:.1f}%\nEnergy: {opt_green*1000:.0f} mJ',
                  xy=(opt_L, opt_eff * 100),
                  xytext=(opt_L - 3.5, opt_eff * 100 - 25),
                  arrowprops=dict(facecolor='black', shrink=0.08, width=1.5, headwidth=6, headlength=6),

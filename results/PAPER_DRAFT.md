@@ -47,8 +47,8 @@ The twin's predictions vs. experimental data (Raza et al. 2025) are summarized i
 | Stage | $E_{\text{in}}$ (mJ) | Measured (mJ) | Paper Calc (mJ) | Digital Twin (mJ) | Twin Error % | B-integral (rad) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | AMP-1 GM1 p1 | 15.0 | 70.0 | 122.0 | 69.1 | -1.3% | 0.80 |
-| AMP-1 GM1 p2 | 70.0 | 200.0 | 216.0 | 137.8 | -31.2% | 1.60 |
-| AMP-2 GM2 p1 | 140.0 | 470.0 | 561.0 | 401.8 | -13.9% | 1.63 |
+| AMP-1 GM1 p2 | 70.0 | 200.0 | 216.0 | 137.7 | -31.2% | 1.60 |
+| AMP-2 GM2 p1 | 140.0 | 470.0 | 561.0 | 404.4 | -13.9% | 1.63 |
 | AMP-2 GM2 p2 | 470.0 | 755.0 | 838.0 | 782.1 | +3.6% | 3.15 |
 | AMP-3 GM3 | 720.0 | 980.0 | 1006.0 | 902.0 | -8.0% | 0.94 |
 | AMP-3 GM4 | 980.0 | 1280.0 | 1286.0 | 1185.4 | -7.4% | 1.24 |
@@ -61,7 +61,7 @@ The twin's predictions vs. experimental data (Raza et al. 2025) are summarized i
 The performance is visually shown in the parity and per-stage error plots (`twin_parity.png` and `stage_error_bar.png`).
 
 ### 3.2 Second Harmonic Generation (SHG)
-Second harmonic conversion efficiency and green output energy vs. LBO doubling crystal length are plotted in `shg_curve.png`. The model predicts an optimum crystal length of 10 mm yielding **1115 mJ** of 532 nm energy from the 1.28 J fundamental (87.1% efficiency). With further crystal length increases, depletion-driven back-conversion causes a rollover in efficiency (e.g., dropping to 84.8% at 12 mm and 57.2% at 15 mm).
+Second harmonic conversion efficiency and green output energy vs. LBO doubling crystal length are plotted in `shg_curve.png`. The model predicts an optimum crystal length of 12.8 mm yielding **1061.8 mJ** of 532 nm energy from the 1.28 J fundamental (82.9% efficiency). With further crystal length increases, depletion-driven back-conversion causes a rollover in efficiency (e.g., dropping to 81.9% at 14 mm and 79.5% at 15 mm).
 
 ---
 

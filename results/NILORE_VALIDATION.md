@@ -62,15 +62,17 @@ Second-harmonic generation predictions based on the 1.28 J fundamental output at
 
 | Crystal Length (mm) | Conversion Efficiency (%) | Green Energy (mJ) |
 | :---: | :---: | :---: |
-| 2 | 7.4% | 94.5 |
-| 4 | 27.0% | 346.2 |
-| 6 | 52.4% | 670.7 |
-| 8 | 74.9% | 959.2 |
-| 10 | 87.1% | 1114.8 |
-| 12 | 84.8% | 1085.3 |
-| 14 | 68.8% | 880.7 |
+| 0 | 0.0% | 0.0 |
+| 2 | 8.2% | 104.3 |
+| 4 | 27.8% | 355.6 |
+| 6 | 49.5% | 633.4 |
+| 8 | 66.8% | 854.9 |
+| 10 | 77.7% | 994.6 |
+| 12 | 82.6% | 1056.8 |
+| 14 | 81.9% | 1048.5 |
+| 15 | 79.5% | 1017.9 |
 
-- **Optimum Crystal Length**: 10 mm yielding **1114.8 mJ** of 532 nm green energy (conversion efficiency of 87.1%)
+- **Optimum Crystal Length**: 12.8 mm yielding **1061.8 mJ** of 532 nm green energy (conversion efficiency of 82.9%)
 
 #### SHG Conversion Curve
 ![SHG Conversion Curve](shg_curve.png)

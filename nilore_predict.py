@@ -82,31 +82,77 @@ def fsat_sensitivity(f_sat_values: Tuple[float, ...] = (0.3, 0.35, 0.4)) -> Dict
 # ------------------------------------------------------------------
 # 2) Predicted 532 nm second-harmonic energy from the 1.28 J output
 # ------------------------------------------------------------------
+import cmath
+
+def solve_shg_ode(L_mm: float, gamma_0: float, dk: float) -> float:
+    """Solve coupled equations for SHG:
+    du1/dz = - gamma_0 * conj(u1) * u2 * exp(i * dk * z)
+    du2/dz = gamma_0 * u1^2 * exp(-i * dk * z)
+    using RK4 method.
+    """
+    if L_mm <= 0.0:
+        return 0.0
+    L_m = L_mm * 1e-3
+    n_steps = 200
+    dz = L_m / n_steps
+    
+    u1 = 1.0 + 0j
+    u2 = 0.0 + 0j
+    
+    for i in range(n_steps):
+        z = i * dz
+        
+        def derivs(u1_val, u2_val, z_val):
+            d1 = -gamma_0 * u1_val.conjugate() * u2_val * cmath.exp(1j * dk * z_val)
+            d2 = gamma_0 * (u1_val ** 2) * cmath.exp(-1j * dk * z_val)
+            return d1, d2
+            
+        k1_1, k1_2 = derivs(u1, u2, z)
+        k2_1, k2_2 = derivs(u1 + 0.5 * dz * k1_1, u2 + 0.5 * dz * k1_2, z + 0.5 * dz)
+        k3_1, k3_2 = derivs(u1 + 0.5 * dz * k2_1, u2 + 0.5 * dz * k2_2, z + 0.5 * dz)
+        k4_1, k4_2 = derivs(u1 + dz * k3_1, u2 + dz * k3_2, z + dz)
+        
+        u1 += (dz / 6.0) * (k1_1 + 2 * k2_1 + 2 * k3_1 + k4_1)
+        u2 += (dz / 6.0) * (k1_2 + 2 * k2_2 + 2 * k3_2 + k4_2)
+        
+    return abs(u2) ** 2
+
 def predict_shg(fundamental_j: float = 1.280,
                 beam_diam_cm: float = 1.6,
                 pulse_fwhm_s: float = nt.PULSE_FWHM_S,
-                crystal_lengths_mm: Tuple[float, ...] = (2, 4, 6, 8, 10, 12, 14),
-                deff_pm_v: float = 3.9) -> Dict:
-    """depletion-driven back-conversion SHG conversion vs crystal length at the paper's peak intensity.
+                crystal_lengths_mm: Tuple[float, ...] = (0, 2, 4, 6, 8, 10, 12, 14, 15),
+                deff_pm_v: float = 3.9,
+                dk_m1: float = 55.0) -> Dict:
+    """Rigorous coupled-wave SHG conversion vs crystal length at the paper's peak intensity.
 
-    LBO-class deff ~ 3.9 pm/V. Conversion driven by fundamental intensity
-    I = 0.937 * F / tau for the measured super-Gaussian (n=4) beam.
+    Accounts for pump depletion and phase-mismatch back-conversion.
+    LBO-class deff ~ 3.9 pm/V.
     """
     w = beam_diam_cm / 2.0
     area_cm2 = math.pi * w * w
     f_peak = (2.0 ** (2.0 / 4)) * fundamental_j / (math.pi * w * w)  # J/cm^2
     i_peak = 0.937 * f_peak / pulse_fwhm_s                            # W/cm^2
     i_si = i_peak * 1e4                                               # W/m^2
-    # lumped nonlinear drive (calibrated so ~6-8 mm gives ~50-60%, typical LBO)
     kappa = 5.8e-6 * deff_pm_v
+    gamma_0 = kappa * math.sqrt(max(i_si, 0.0))
+    
     rows = []
     for L_mm in crystal_lengths_mm:
-        drive = kappa * math.sqrt(max(i_si, 0.0)) * (L_mm * 1e-3)
-        # Use sine-squared for depletion-driven back-conversion rollover
-        eff = 0.88 * (math.sin(drive) ** 2)
+        eff = solve_shg_ode(L_mm, gamma_0, dk_m1)
         rows.append({"length_mm": L_mm, "eff": eff,
                      "green_energy_j": fundamental_j * eff})
-    best = max(rows, key=lambda r: r["green_energy_j"])
+                     
+    # Search continuously for the exact mathematical optimum
+    sweep_L = [i * 0.1 for i in range(151)]
+    best_L = 0.0
+    best_eff = 0.0
+    for L_mm in sweep_L:
+        eff = solve_shg_ode(L_mm, gamma_0, dk_m1)
+        if eff > best_eff:
+            best_eff = eff
+            best_L = L_mm
+            
+    best = {"length_mm": best_L, "eff": best_eff, "green_energy_j": fundamental_j * best_eff}
     return {"peak_intensity_w_cm2": i_peak, "rows": rows, "best": best}
 
 
