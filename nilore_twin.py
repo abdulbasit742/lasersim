@@ -48,9 +48,11 @@ PULSE_FWHM_S = 200e-12     # <200 ps
 ROD_LENGTH_CM = 13.0       # 130 mm rods throughout
 B_INTEGRAL_SAFE = 5.0      # safe cap
 # Saturation fluence: fixed at paper's quoted value (0.3 J/cm^2).
-# The ONLY fitted mechanism is the beam-fill-factor exponent (eta = (d_beam/d_rod)^1.43).
-# We deliberately do NOT calibrate F_sat away from the paper's physical range.
 F_SAT = F_SAT_PAPER        # 0.3 J/cm^2 -- inside paper's quoted 0.4 +/- 0.1 range
+
+# Saturation transition parameter: beta = 0.130.
+# Interpolates fill factor between small-signal (no overlap penalty) and fully saturated.
+BETA_SAT = 0.130
 
 
 @dataclass
@@ -106,14 +108,17 @@ def simulate_stage(st: Stage, corrected: bool = True, f_sat: float = F_SAT,
     a_beam = st.beam_area_cm2()
     a_rod = st.rod_area_cm2()
     stored = st.stored_energy_j if stored_override_j is None else stored_override_j
+    f_in = st.e_in_j / a_beam
     
     # Beam fill factor correction
     if corrected:
         # We use alpha = 1.43 to account for the peaked gain distribution at the center of diode-pumped rod amplifiers
         eta = min((st.beam_diam_cm / st.rod_diam_cm) ** 1.43, 1.0)
-        stored = stored * eta
+        # Saturation-dependent fill-factor interpolation:
+        s = f_in / f_sat
+        eta_eff = eta + (1.0 - eta) * math.exp(-s / BETA_SAT)
+        stored = stored * eta_eff
         
-    f_in = st.e_in_j / a_beam
     f_store = stored / a_rod
     g0 = small_signal_gain(f_store, f_sat)
     f_out = fn_out_fluence(f_in, g0, f_sat)
