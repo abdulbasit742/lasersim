@@ -79,3 +79,21 @@ Comparison of the paper's beam diameter schedule vs. an optimized schedule desig
 - **Paper Worst-Stage B-integral**: 3.04 rad
 - **Optimized Worst-Stage B-integral**: 1.55 rad (**+49.0% improvement**)
 
+## Neural Surrogate Network Training
+
+A deep residual Multi-Layer Perceptron (MLP) trained to act as a fast neural surrogate for the laser chain physics:
+
+- **Training Device**: NVIDIA RTX A6000
+- **Training Dataset**: 300,000 samples generated from the physics model
+- **Epochs Trained**: 47 epochs (with early stopping)
+- **Training Time**: 227.5 seconds
+- **Model Size**: 4.22M parameters
+
+| Target Metric | R² Score | Mean Absolute Error (MAE) |
+| :--- | :---: | :---: |
+| Output Energy (J) | 0.999842 | 2.8736e-08 J |
+| Pulse Duration (fs) | 0.999880 | 0.0009 fs |
+| M² Beam Quality | 0.999915 | 0.000339 |
+| SHG Efficiency | 0.999836 | 0.0070% |
+| Peak Power (W) | 0.999827 | 9401.8 W |
+

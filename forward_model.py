@@ -135,7 +135,7 @@ def _simulate_reference(design: Dict[str, float], sp: SystemParams) -> Dict[str,
     shg_eff = 0.0
     if shg_mm > 1e-6 and peak_power_w > 0:
         I_fund = peak_power_w / (area_cm2 * 1e-4)          # W/m^2
-        kappa = 2.0e-13 * sp.shg_deff_pm_v                 # lumped nonlinear drive
+        kappa = 2.0e-6 * sp.shg_deff_pm_v                 # lumped nonlinear drive
         drive = kappa * math.sqrt(max(I_fund, 0.0)) * (shg_mm * 1e-3)
         mism = 1.0 / (1.0 + sp.shg_phase_mismatch ** 2)
         shg_eff = (math.tanh(drive) ** 2) * mism

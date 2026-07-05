@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import json
 from nilore_twin import validate, design_for_energy
 from nilore_predict import fsat_sensitivity, predict_shg, extrapolate_amp4, optimal_beam_schedule
 
@@ -23,6 +24,15 @@ def main():
     amp4 = extrapolate_amp4()
     opt_beam = optimal_beam_schedule()
     
+    # Load PyTorch surrogate net results if present
+    surr_info = None
+    if os.path.exists("results/surrogate_net.json"):
+        try:
+            with open("results/surrogate_net.json", "r") as fh:
+                surr_info = json.load(fh)
+        except Exception as e:
+            print(f"Warning: Could not read surrogate_net.json: {e}")
+            
     # Generate markdown content
     md = []
     md.append("# NILORE Nd:YAG Digital-Twin Validation")
@@ -111,13 +121,52 @@ def main():
     md.append(f"- **Paper Worst-Stage B-integral**: {opt_beam['paper_worst_b']:.2f} rad")
     md.append(f"- **Optimized Worst-Stage B-integral**: {opt_beam['optimized_worst_b']:.2f} rad (**{opt_beam['improvement_pct']:+.1f}% improvement**)")
     md.append("")
+
+    # 5) PyTorch surrogate net results
+    if surr_info:
+        md.append("## Neural Surrogate Network Training")
+        md.append("")
+        md.append("A deep residual Multi-Layer Perceptron (MLP) trained to act as a fast neural surrogate for the laser chain physics:")
+        md.append("")
+        md.append(f"- **Training Device**: {surr_info['device']}")
+        md.append(f"- **Training Dataset**: {surr_info['samples']:,} samples generated from the physics model")
+        md.append(f"- **Epochs Trained**: {surr_info['epochs_run']} epochs (with early stopping)")
+        md.append(f"- **Training Time**: {surr_info['seconds']:.1f} seconds")
+        md.append(f"- **Model Size**: {surr_info['params_m']:.2f}M parameters")
+        md.append("")
+        md.append("| Target Metric | R² Score | Mean Absolute Error (MAE) |")
+        md.append("| :--- | :---: | :---: |")
+        for key in surr_info["r2"].keys():
+            r2_val = surr_info["r2"][key]
+            mae_val = surr_info["mae"][key]
+            # format values nicely
+            if key == "output_energy_j":
+                metric_name = "Output Energy (J)"
+                mae_str = f"{mae_val:.4e} J"
+            elif key == "pulse_duration_fs":
+                metric_name = "Pulse Duration (fs)"
+                mae_str = f"{mae_val:.4f} fs"
+            elif key == "m2":
+                metric_name = "M² Beam Quality"
+                mae_str = f"{mae_val:.6f}"
+            elif key == "shg_efficiency":
+                metric_name = "SHG Efficiency"
+                mae_str = f"{mae_val*100:.4f}%"
+            elif key == "peak_power_w":
+                metric_name = "Peak Power (W)"
+                mae_str = f"{mae_val:.1f} W"
+            else:
+                metric_name = key
+                mae_str = f"{mae_val:.4g}"
+            md.append(f"| {metric_name} | {r2_val:.6f} | {mae_str} |")
+        md.append("")
     
     md_content = "\n".join(md) + "\n"
     
     with open("results/NILORE_VALIDATION.md", "w", encoding="utf-8") as f:
         f.write(md_content)
         
-    print("Successfully generated results/NILORE_VALIDATION.md with prediction extensions")
+    print("Successfully generated results/NILORE_VALIDATION.md with surrogate neural network stats")
 
 if __name__ == "__main__":
     main()
