@@ -33,6 +33,15 @@ def main():
         except Exception as e:
             print(f"Warning: Could not read surrogate_net.json: {e}")
             
+    # Load PyTorch neural inverse design results if present
+    inv_info = None
+    if os.path.exists("results/neural_inverse.json"):
+        try:
+            with open("results/neural_inverse.json", "r") as fh:
+                inv_info = json.load(fh)
+        except Exception as e:
+            print(f"Warning: Could not read neural_inverse.json: {e}")
+            
     # Generate markdown content
     md = []
     md.append("# NILORE Nd:YAG Digital-Twin Validation")
@@ -139,7 +148,6 @@ def main():
         for key in surr_info["r2"].keys():
             r2_val = surr_info["r2"][key]
             mae_val = surr_info["mae"][key]
-            # format values nicely
             if key == "output_energy_j":
                 metric_name = "Output Energy (J)"
                 mae_str = f"{mae_val:.4e} J"
@@ -160,13 +168,98 @@ def main():
                 mae_str = f"{mae_val:.4g}"
             md.append(f"| {metric_name} | {r2_val:.6f} | {mae_str} |")
         md.append("")
+
+    # 6) Differentiable inverse design (GPU)
+    if inv_info:
+        md.append("## Differentiable Inverse Design (GPU)")
+        md.append("")
+        md.append("Results of gradient-based parallel inverse design optimization using autograd backpropagation through an ensemble of trained neural surrogates:")
+        md.append("")
+        md.append(f"- **Execution Device**: {inv_info['device']}")
+        md.append(f"- **Ensemble Size**: {inv_info['ensemble_size']} neural models")
+        md.append(f"- **Population Size**: {inv_info['population']:,} parallel candidates")
+        md.append(f"- **Optimization Time**: {inv_info['opt_time_s']:.1f} seconds")
+        md.append("")
+        md.append("### Optimized Design Parameters")
+        md.append("")
+        md.append("| Parameter | Optimized Value | Bound Range |")
+        md.append("| :--- | :---: | :---: |")
+        for key, val in inv_info["best_design"].items():
+            if key == "pump_power_w":
+                name = "Pump Power (W)"
+                bound = "5.0 - 400.0"
+                val_str = f"{val:.2f} W"
+            elif key == "crystal_length_cm":
+                name = "Crystal Length (cm)"
+                bound = "0.2 - 8.0"
+                val_str = f"{val:.3f} cm"
+            elif key == "seed_energy_nj":
+                name = "Seed Energy (nJ)"
+                bound = "0.1 - 5000.0"
+                val_str = f"{val:.2f} nJ"
+            elif key == "residual_gdd_fs2":
+                name = "Residual GDD (fs²)"
+                bound = "0.0 - 60000.0"
+                val_str = f"{val:.1f} fs²"
+            elif key == "shg_length_mm":
+                name = "SHG Crystal Length (mm)"
+                bound = "0.0 - 20.0"
+                val_str = f"{val:.3f} mm"
+            else:
+                name = key
+                bound = ""
+                val_str = f"{val:.4g}"
+            md.append(f"| {name} | {val_str} | {bound} |")
+        md.append("")
+        md.append("### Target vs. Ensemble Predictions vs. Physics Check")
+        md.append("")
+        md.append("| Metric | Target Spec | Ensemble Surrogate Prediction | Physics Verification |")
+        md.append("| :--- | :---: | :---: | :---: |")
+        for key, stats in inv_info["metrics"].items():
+            t = stats["target"]
+            mean = stats["surrogate_mean"]
+            std = stats["surrogate_std"]
+            phys = stats["physics_check"]
+            
+            if key == "output_energy_j":
+                name = "Output Energy (J)"
+                t_str = f"{t*1e6:.1f} µJ"
+                s_str = f"{mean*1e6:.2f} ± {std*1e6:.2f} µJ"
+                p_str = f"{phys*1e6:.2f} µJ"
+            elif key == "pulse_duration_fs":
+                name = "Pulse Duration (fs)"
+                t_str = f"{t:.1f} fs"
+                s_str = f"{mean:.1f} ± {std:.3f} fs"
+                p_str = f"{phys:.1f} fs"
+            elif key == "m2":
+                name = "M² Beam Quality"
+                t_str = f"{t:.2f}"
+                s_str = f"{mean:.3f} ± {std:.4f}"
+                p_str = f"{phys:.3f}"
+            elif key == "shg_efficiency":
+                name = "SHG Efficiency"
+                t_str = f"{t*100:.1f}%"
+                s_str = f"{mean*100:.2f} ± {std*100:.3f}%"
+                p_str = f"{phys*100:.2f}%"
+            elif key == "peak_power_w":
+                name = "Peak Power (W)"
+                t_str = f"{t/1e6:.1f} MW"
+                s_str = f"{mean/1e6:.2f} ± {std/1e6:.2f} MW"
+                p_str = f"{phys/1e6:.2f} MW"
+            else:
+                name = key
+                t_str = f"{t:.4g}"
+                s_str = f"{mean:.4g} ± {std:.4g}"
+                p_str = f"{phys:.4g}"
+            md.append(f"| {name} | {t_str} | {s_str} | {p_str} |")
+        md.append("")
     
     md_content = "\n".join(md) + "\n"
     
     with open("results/NILORE_VALIDATION.md", "w", encoding="utf-8") as f:
         f.write(md_content)
         
-    print("Successfully generated results/NILORE_VALIDATION.md with surrogate neural network stats")
+    print("Successfully generated results/NILORE_VALIDATION.md with surrogate neural network & neural inverse stats")
 
 if __name__ == "__main__":
     main()

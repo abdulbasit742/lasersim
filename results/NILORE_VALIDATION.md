@@ -97,3 +97,32 @@ A deep residual Multi-Layer Perceptron (MLP) trained to act as a fast neural sur
 | SHG Efficiency | 0.999836 | 0.0070% |
 | Peak Power (W) | 0.999827 | 9401.8 W |
 
+## Differentiable Inverse Design (GPU)
+
+Results of gradient-based parallel inverse design optimization using autograd backpropagation through an ensemble of trained neural surrogates:
+
+- **Execution Device**: NVIDIA RTX A6000
+- **Ensemble Size**: 5 neural models
+- **Population Size**: 16,384 parallel candidates
+- **Optimization Time**: 341.3 seconds
+
+### Optimized Design Parameters
+
+| Parameter | Optimized Value | Bound Range |
+| :--- | :---: | :---: |
+| Pump Power (W) | 399.88 W | 5.0 - 400.0 |
+| Crystal Length (cm) | 7.997 cm | 0.2 - 8.0 |
+| Seed Energy (nJ) | 4998.08 nJ | 0.1 - 5000.0 |
+| Residual GDD (fs²) | 31592.4 fs² | 0.0 - 60000.0 |
+| SHG Crystal Length (mm) | 19.106 mm | 0.0 - 20.0 |
+
+### Target vs. Ensemble Predictions vs. Physics Check
+
+| Metric | Target Spec | Ensemble Surrogate Prediction | Physics Verification |
+| :--- | :---: | :---: | :---: |
+| Output Energy (J) | 80.0 µJ | 23.73 ± 0.25 µJ | 25.72 µJ |
+| Pulse Duration (fs) | 4000.0 fs | 3330.8 ± 0.009 fs | 3330.8 fs |
+| M² Beam Quality | 1.30 | 1.163 ± 0.0032 | 1.166 |
+| SHG Efficiency | 45.0% | 8.47 ± 0.108% | 9.66% |
+| Peak Power (W) | 15.0 MW | 6.67 ± 0.13 MW | 7.26 MW |
+
