@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 from nilore_twin import validate, design_for_energy
+from nilore_predict import fsat_sensitivity, predict_shg, extrapolate_amp4, optimal_beam_schedule
 
 def main():
     # Make results directory
@@ -15,6 +16,12 @@ def main():
     
     # Run inverse design for 1.28 J
     design = design_for_energy(1.28)
+    
+    # Run predictions from nilore_predict.py
+    sens = fsat_sensitivity()
+    shg = predict_shg()
+    amp4 = extrapolate_amp4()
+    opt_beam = optimal_beam_schedule()
     
     # Generate markdown content
     md = []
@@ -50,13 +57,67 @@ def main():
     md.append(f"- **Achieved Output Energy**: {design['achieved_out_j']*1e3:.1f} mJ")
     md.append(f"- **AMP-3 B-integral (worst rod/pass)**: {design['b_integral']:.2f} rad")
     md.append(f"- **Safety Status**: {'SAFE (B < 5.0 rad)' if design['b_safe'] else 'UNSAFE (B >= 5.0 rad)'}")
+    md.append("")
+    
+    # 1) F_sat sensitivity band
+    md.append("## F_sat Sensitivity Analysis")
+    md.append("")
+    md.append("Propagation of the paper's F_sat uncertainty (0.4 ± 0.1 J/cm²) through the digital twin model:")
+    md.append("")
+    md.append("| F_sat (J/cm²) | Predicted Final Energy (mJ) |")
+    md.append("| :---: | :---: |")
+    for fs in sens["f_sat_values"]:
+        md.append(f"| {fs:.2f} | {sens['final_output_j'][fs]*1e3:.1f} |")
+    md.append("")
+    lo_mj, hi_mj = sens["final_band_j"]
+    md.append(f"- **Final-Output Band**: {lo_mj*1e3:.1f} - {hi_mj*1e3:.1f} mJ ({sens['final_band_pct']:.1f}% spread) vs. Measured 1280 mJ")
+    md.append("")
+
+    # 2) Predicted 532 nm SHG table
+    md.append("## Predicted 532 nm (Green) SHG Conversion")
+    md.append("")
+    md.append(f"Second-harmonic generation predictions based on the 1.28 J fundamental output at a peak intensity of {shg['peak_intensity_w_cm2']:.2e} W/cm²:")
+    md.append("")
+    md.append("| Crystal Length (mm) | Conversion Efficiency (%) | Green Energy (mJ) |")
+    md.append("| :---: | :---: | :---: |")
+    for row in shg["rows"]:
+        md.append(f"| {row['length_mm']} | {row['eff']*100:.1f}% | {row['green_energy_j']*1e3:.1f} |")
+    md.append("")
+    best_len = shg["best"]["length_mm"]
+    best_green = shg["best"]["green_energy_j"]
+    md.append(f"- **Optimum Crystal Length**: {best_len} mm yielding **{best_green*1e3:.1f} mJ** of 532 nm green energy (conversion efficiency of {shg['best']['eff']*100:.1f}%)")
+    md.append("")
+
+    # 3) AMP-4 extrapolation
+    md.append("## AMP-4 Extrapolation (Hypothetical Booster Stage)")
+    md.append("")
+    md.append("Performance prediction of adding a 4th single-pass booster stage (AMP-4 GM5) using a 2.5 cm rod with 1.14 J stored energy, assuming the beam is expanded to 2.0 cm:")
+    md.append("")
+    safety_str = "SAFE" if amp4["b_safe"] else "UNSAFE"
+    md.append(f"- **Predicted Output Energy**: **{amp4['predicted_out_j']*1e3:.1f} mJ** (injected: {amp4['e_in_j']*1e3:.0f} mJ, Gain: {amp4['gain']:.2f})")
+    md.append(f"- **B-integral (worst-case)**: {amp4['b_integral']:.2f} rad ({safety_str})")
+    md.append("")
+
+    # 4) B-integral-optimal beam schedule
+    md.append("## B-integral-Optimal Beam Schedule")
+    md.append("")
+    md.append("Comparison of the paper's beam diameter schedule vs. an optimized schedule designed to minimize worst-stage B-integral while maintaining the measured per-stage energies:")
+    md.append("")
+    md.append("| Stage | Paper Beam Diam (cm) | Optimized Beam Diam (cm) | Optimized B-integral (rad) |")
+    md.append("| :--- | :---: | :---: | :---: |")
+    for row in opt_beam["schedule"]:
+        md.append(f"| {row['stage']} | {row['paper_diam_cm']:.1f} | {row['opt_diam_cm']:.1f} | {row['opt_b']:.2f} |")
+    md.append("")
+    md.append(f"- **Paper Worst-Stage B-integral**: {opt_beam['paper_worst_b']:.2f} rad")
+    md.append(f"- **Optimized Worst-Stage B-integral**: {opt_beam['optimized_worst_b']:.2f} rad (**{opt_beam['improvement_pct']:+.1f}% improvement**)")
+    md.append("")
     
     md_content = "\n".join(md) + "\n"
     
     with open("results/NILORE_VALIDATION.md", "w", encoding="utf-8") as f:
         f.write(md_content)
         
-    print("Successfully generated results/NILORE_VALIDATION.md")
+    print("Successfully generated results/NILORE_VALIDATION.md with prediction extensions")
 
 if __name__ == "__main__":
     main()

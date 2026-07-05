@@ -81,7 +81,7 @@ def predict_shg(fundamental_j: float = 1.280,
     i_peak = 0.937 * f_peak / pulse_fwhm_s                            # W/cm^2
     i_si = i_peak * 1e4                                               # W/m^2
     # lumped nonlinear drive (calibrated so ~6-8 mm gives ~50-60%, typical LBO)
-    kappa = 2.6e-13 * deff_pm_v
+    kappa = 5.8e-6 * deff_pm_v
     rows = []
     for L_mm in crystal_lengths_mm:
         drive = kappa * math.sqrt(max(i_si, 0.0)) * (L_mm * 1e-3)
