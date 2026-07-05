@@ -76,7 +76,7 @@ def _r2(yt: List[float], yp: List[float]) -> float:
 # Training (PyTorch)
 # ------------------------------------------------------------------
 def train(samples=200_000, epochs=200, width=512, depth=6, batch=4096,
-          lr=2e-3, seed=0, smoke=False) -> Dict:
+          lr=2e-3, seed=0, smoke=False, _json_path: str = "") -> Dict:
     try:
         import torch
         import torch.nn as nn
@@ -227,7 +227,12 @@ def train(samples=200_000, epochs=200, width=512, depth=6, batch=4096,
                "samples": samples, "epochs_run": len(hist["train"]),
                "seconds": elapsed, "r2": r2, "r2_train": r2_train, "mae": mae,
                "checkpoint": CKPT, "plots": plotted}
-    with open(os.path.join(RESULTS_DIR, "surrogate_net.json"), "w") as fh:
+    # Smoke runs write to a separate file so the authoritative full-run
+    # surrogate_net.json is never overwritten by a cheap CI pass.
+    json_name = _json_path if _json_path else (
+        "surrogate_net_smoke.json" if smoke else "surrogate_net.json"
+    )
+    with open(os.path.join(RESULTS_DIR, json_name), "w") as fh:
         json.dump({k: v for k, v in summary.items() if k != "plots"}, fh, indent=2)
     return summary
 

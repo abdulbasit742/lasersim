@@ -105,18 +105,18 @@ Comparison of the paper's beam diameter schedule vs. an optimized schedule desig
 A deep residual Multi-Layer Perceptron (MLP) trained to act as a fast neural surrogate for the laser chain physics:
 
 - **Training Device**: NVIDIA RTX A6000
-- **Training Dataset**: 4,000 samples generated from the physics model
-- **Epochs Trained**: 8 epochs (with early stopping)
-- **Training Time**: 4.3 seconds
-- **Model Size**: 0.02M parameters
+- **Training Dataset**: 300,000 samples generated from the physics model
+- **Epochs Trained**: 70 epochs (with early stopping)
+- **Training Time**: 235.8 seconds
+- **Model Size**: 4.22M parameters
 
 | Target Metric | R² Score | Mean Absolute Error (MAE) |
 | :--- | :---: | :---: |
-| Output Energy (J) | 0.960456 | 4.4065e-07 J |
-| Pulse Duration (fs) | 0.960280 | 0.0158 fs |
-| M² Beam Quality | 0.971224 | 0.006281 |
-| SHG Efficiency | 0.936180 | 0.1256% |
-| Peak Power (W) | 0.961933 | 119701.1 W |
+| Output Energy (J) | 0.999986 | 9.0406e-09 J |
+| Pulse Duration (fs) | 0.999982 | 0.0004 fs |
+| M² Beam Quality | 0.999981 | 0.000158 |
+| SHG Efficiency | 0.999987 | 0.0021% |
+| Peak Power (W) | 0.999987 | 2464.4 W |
 
 ## Differentiable Inverse Design (GPU)
 
@@ -125,7 +125,7 @@ Results of gradient-based parallel inverse design optimization using autograd ba
 - **Execution Device**: NVIDIA RTX A6000
 - **Ensemble Size**: 2 neural models
 - **Population Size**: 512 parallel candidates
-- **Optimization Time**: 4.8 seconds
+- **Optimization Time**: 5.3 seconds
 
 ### Optimized Design Parameters
 

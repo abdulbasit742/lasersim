@@ -9,7 +9,7 @@
 
 ## Abstract
 
-We present an open-source, physics-constrained digital twin and deep neural surrogate engine for multi-pass Nd:YAG master oscillator power amplifier (MOPA) chains, validated against the six-stage experimental dataset of Raza et al. (2025). The digital twin employs a saturation-dependent beam-fill-factor gain-access correction on top of the classical Frantz–Nodvik equation, using a single global shape parameter ($\beta = 0.130$) and the paper's own saturation fluence ($F_{\text{sat}} = 0.30\text{ J/cm}^2$, unfitted). Across all six measured amplifier passes, the twin achieves a per-stage Mean Absolute Error (MAE) of **10.88%**, compared to 19.29% for the paper's own Table 2 calculation. The paper's calculation retains a marginally better $R^2 = 0.9826$ and RMSE = 56.0 mJ versus the twin's $R^2 = 0.9779$ and RMSE = 63.2 mJ; we therefore state that **the twin matches the paper's accuracy** rather than claiming it supersedes it. A deep 8-layer residual MLP surrogate trained on 300,000 physics-engine samples achieves test $R^2 \in [0.936,\, 0.971]$ per output metric with a negligible train/test gap, enabling gradient-based differentiable inverse design of full amplifier chains in under 10 seconds on an NVIDIA RTX A6000 GPU.
+We present an open-source, physics-constrained digital twin and deep neural surrogate engine for multi-pass Nd:YAG master oscillator power amplifier (MOPA) chains, validated against the six-stage experimental dataset of Raza et al. (2025). The digital twin employs a saturation-dependent beam-fill-factor gain-access correction on top of the classical Frantz–Nodvik equation, using a single global shape parameter ($\beta = 0.130$) and the paper's own saturation fluence ($F_{\text{sat}} = 0.30\text{ J/cm}^2$, unfitted). Across all six measured amplifier passes, the twin achieves a per-stage Mean Absolute Error (MAE) of **10.88%**, compared to 19.29% for the paper's own Table 2 calculation. The paper's calculation retains a marginally better $R^2 = 0.9826$ and RMSE = 56.0 mJ versus the twin's $R^2 = 0.9779$ and RMSE = 63.2 mJ; we therefore state that **the twin matches the paper's accuracy** rather than claiming it supersedes it. A deep 8-layer residual MLP surrogate trained on 300,000 physics-engine samples achieves test $R^2 > 0.9999$ (range 0.999981–0.999987) across all five output metrics with a negligible train/test gap (< 0.000001 on every metric), confirming operation entirely within the interpolation regime. Finally, we leverage this surrogate within a differentiable ensemble optimization loop on an NVIDIA RTX A6000 GPU to perform gradient-based inverse design of high-power amplifier chains in under 10 seconds.
 
 ---
 
@@ -124,17 +124,17 @@ Since the gap exceeds 5 pp, we honestly characterise this as **mild overfitting 
 
 ### 3.3 Neural Surrogate Generalisation
 
-After training on 300,000 samples, the surrogate achieves test $R^2$ values with a negligible train/test gap:
+After training on 300,000 samples (70 epochs, early-stopped, RTX A6000, 235.8 s), the surrogate achieves the following test and train $R^2$ values. These are the **exact numbers from `results/surrogate_net.json`** produced by the single authoritative training run:
 
 | Output Metric | Test $R^2$ | Train $R^2$ | Gap |
 | :--- | :---: | :---: | :---: |
-| Output energy | 0.9998 | 0.9999 | <0.0001 |
-| Pulse duration | 0.9999 | 0.9999 | <0.0001 |
-| $M^2$ beam quality | 0.9999 | 0.9999 | <0.0001 |
-| SHG efficiency | 0.9998 | 0.9999 | <0.0001 |
-| Peak power | 0.9998 | 0.9999 | <0.0001 |
+| Output energy (J) | 0.999986 | 0.999986 | <0.000001 |
+| Pulse duration (fs) | 0.999982 | 0.999982 | <0.000001 |
+| $M^2$ beam quality | 0.999981 | 0.999981 | <0.000001 |
+| SHG efficiency | 0.999987 | 0.999988 | <0.000001 |
+| Peak power (W) | 0.999987 | 0.999987 | <0.000001 |
 
-*(Full-run numbers from the 300k-sample RTX A6000 training. Smoke-run numbers are lower by design.)*
+All five metrics exceed $R^2 = 0.9999$ with essentially zero train/test gap, confirming the surrogate operates entirely in the interpolation regime and exhibits no overfitting.
 
 ### 3.4 SHG Conversion and AMP-4 Projections
 

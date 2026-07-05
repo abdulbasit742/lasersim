@@ -219,6 +219,7 @@ def main():
     
     # 2. Surrogate stats
     surr_r2_gap = {}
+    surr_data = {}
     if os.path.exists("results/surrogate_net.json"):
         with open("results/surrogate_net.json", "r") as fh:
             surr_data = json.load(fh)
@@ -250,10 +251,12 @@ def main():
     gen_status = "mild overfitting / parameter sensitivity" if (loso_mae - full_fit_mae) > 5.0 else "model generalizes"
     print(f"  Generalization:   LOSO MAE = {loso_mae:.2f}% ({gen_status})")
     print("-" * 80)
-    print("Surrogate Neural Net Generalization (Train vs Test R^2 Gap):")
+    surr_samples = surr_data.get("samples", "?") if surr_r2_gap else "?"
+    surr_epochs  = surr_data.get("epochs_run", "?") if surr_r2_gap else "?"
+    print(f"Surrogate Neural Net Generalization (source: surrogate_net.json, {surr_samples} samples, {surr_epochs} epochs):")
     if surr_r2_gap:
         for m, (te_r2, tr_r2) in surr_r2_gap.items():
-            print(f"  {m:18s}: test R^2={te_r2:.6f} | train R^2={tr_r2:.6f} | gap={abs(tr_r2 - te_r2):.6f}")
+            print(f"  {m:18s}: test R^2={te_r2:.6f} | train R^2={tr_r2:.6f} | gap={abs(tr_r2 - te_r2):.7f}")
     else:
         print("  [Warning] surrogate_net.json not found!")
     print("-" * 80)
