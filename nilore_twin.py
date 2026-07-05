@@ -174,9 +174,26 @@ def validate(corrected: bool = True, f_sat: Optional[float] = None) -> Dict:
     mechanism is the beam-fill-factor correction (eta exponent 1.43)."""
     fs = F_SAT if f_sat is None else f_sat
     rows, twin_err, paper_err = [], [], []
+    extractions = {}
     for st in published_chain():
-        r = simulate_stage(st, corrected=corrected, f_sat=fs)
+        gm_name = None
+        if "AMP-1 GM1" in st.name:
+            gm_name = "GM1"
+        elif "AMP-2 GM2" in st.name:
+            gm_name = "GM2"
+            
+        stored_override = None
+        if gm_name and gm_name in extractions:
+            # Deplete the stored energy by the previous pass's extraction
+            stored_override = max(st.stored_energy_j - extractions[gm_name], 0.0)
+            
+        r = simulate_stage(st, corrected=corrected, f_sat=fs, stored_override_j=stored_override)
         e = r["e_out_j"]
+        
+        if gm_name:
+            ext = max(e - st.e_in_j, 0.0)
+            extractions[gm_name] = extractions.get(gm_name, 0.0) + ext
+            
         b = b_integral(st, e)
         te = 100.0 * (e - st.e_out_meas_j) / st.e_out_meas_j
         pe = 100.0 * (st.e_out_paper_calc_j - st.e_out_meas_j) / st.e_out_meas_j

@@ -45,9 +45,26 @@ def fsat_sensitivity(f_sat_values: Tuple[float, ...] = (0.3, 0.35, 0.4)) -> Dict
     for fs in f_sat_values:
         chain = nt.published_chain()
         outs = []
+        extractions = {}
         for st in chain:
-            r = nt.simulate_stage(st, corrected=True, f_sat=fs)
-            outs.append(r["e_out_j"])
+            gm_name = None
+            if "AMP-1 GM1" in st.name:
+                gm_name = "GM1"
+            elif "AMP-2 GM2" in st.name:
+                gm_name = "GM2"
+                
+            stored_override = None
+            if gm_name and gm_name in extractions:
+                stored_override = max(st.stored_energy_j - extractions[gm_name], 0.0)
+                
+            r = nt.simulate_stage(st, corrected=True, f_sat=fs, stored_override_j=stored_override)
+            e = r["e_out_j"]
+            
+            if gm_name:
+                ext = max(e - st.e_in_j, 0.0)
+                extractions[gm_name] = extractions.get(gm_name, 0.0) + ext
+                
+            outs.append(e)
         finals[fs] = outs[-1]
         per_stage[fs] = outs
     lo = min(finals.values())

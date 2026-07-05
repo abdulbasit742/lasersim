@@ -8,9 +8,9 @@ This document contains the validation results for the digital twin model of the 
 | Stage | E_in (mJ) | Measured (mJ) | Paper-calc (mJ) | Twin (mJ) | Paper Err % | Twin Err % | B-integral (rad) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | AMP-1 GM1 p1 | 15.0 | 70.0 | 122.0 | 37.9 | +74.3% | -45.9% | 0.44 |
-| AMP-1 GM1 p2 | 70.0 | 200.0 | 216.0 | 139.0 | +8.0% | -30.5% | 1.61 |
+| AMP-1 GM1 p2 | 70.0 | 200.0 | 216.0 | 137.8 | +8.0% | -31.1% | 1.60 |
 | AMP-2 GM2 p1 | 140.0 | 470.0 | 561.0 | 401.8 | +19.4% | -14.5% | 1.62 |
-| AMP-2 GM2 p2 | 470.0 | 755.0 | 838.0 | 845.8 | +11.0% | +12.0% | 3.40 |
+| AMP-2 GM2 p2 | 470.0 | 755.0 | 838.0 | 782.8 | +11.0% | +3.7% | 3.15 |
 | AMP-3 GM3 | 720.0 | 980.0 | 1006.0 | 901.9 | +2.7% | -8.0% | 0.94 |
 | AMP-3 GM4 | 980.0 | 1280.0 | 1286.0 | 1185.4 | +0.5% | -7.4% | 1.24 |
 
@@ -19,10 +19,10 @@ This document contains the validation results for the digital twin model of the 
 F_sat = 0.30 J/cm² (paper's quoted value, inside stated 0.4 ± 0.1 J/cm² range).
 The ONLY fitted mechanism is the beam-fill-factor gain-access correction (η = (d_beam/d_rod)^1.43).
 
-- **Paper Frantz-Nodvik Model MAE** (no fill-factor, F_sat=0.3): 52.20%
-- **Twin Model MAE** (fill-factor correction, F_sat=0.3): 19.72%
+- **Paper Frantz-Nodvik Model MAE** (no fill-factor, F_sat=0.3): 44.47%
+- **Twin Model MAE** (fill-factor correction, F_sat=0.3): 18.43%
 
-✓ **Status**: The beam-fill-factor correction reduces MAE from 52.2% to 19.7% using the paper's own F_sat value — no hidden free parameters.
+✓ **Status**: The beam-fill-factor correction reduces MAE from 44.5% to 18.4% using the paper's own F_sat value — no hidden free parameters.
 
 ## Inverse Design for 1.28 J Output
 
