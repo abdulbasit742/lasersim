@@ -8,24 +8,15 @@ F_SAT = 0.30
 ALPHA = 1.43
 
 # ── SYSTEM A — Raza 2025 (all params from paper)
-raza = [
-    ('AMP-1 GM1 p1', 0.7, 1.5, 1.622, 0.015, 0.070),
-    ('AMP-1 GM1 p2', 0.7, 1.5, 1.622, 0.070, 0.200),
-    ('AMP-2 GM2 p1', 1.0, 1.5, 1.622, 0.140, 0.470),
-    ('AMP-2 GM2 p2', 1.0, 1.5, 1.622, 0.470, 0.755),
-    ('AMP-3 GM3',    1.6, 2.5, 1.140, 0.720, 0.980),
-    ('AMP-4 GM4',    1.6, 2.5, 1.140, 0.980, 1.280),
-]
+import nilore_twin as nt
+res_A_val = nt.validate(corrected=True)
 rows_A = []
 errs_A = []
-for (n, bd, rd, se, ein, em) in raza:
-    st = Stage(n, bd, rd, se, ein, em, em, 2, False)
-    r  = simulate_stage(st, corrected=True, f_sat=F_SAT, alpha=ALPHA)
-    et = r['e_out_j']
-    err = 100.0 * (et - em) / em
-    rows_A.append((n, ein*1e3, em*1e3, et*1e3, err))
-    errs_A.append(abs(err))
-mae_A = sum(errs_A) / len(errs_A)
+for r in res_A_val['rows']:
+    rows_A.append((r['stage'], r['e_in_mj'], r['meas_mj'], r['twin_mj'], r['twin_err_pct']))
+    errs_A.append(abs(r['twin_err_pct']))
+mae_A = res_A_val['mae_twin_pct']
+
 
 # ── SYSTEM B — Kornev 2018 (OL 43, 4394)
 # Stated: seed=5 mJ, two phi10x140mm rods, two-pass PA, output=0.43 J
