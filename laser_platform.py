@@ -16,6 +16,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field, replace
 from typing import Callable, Dict, List, Optional, Sequence, Tuple
 import numpy as np
+trapz = getattr(np, 'trapezoid', getattr(np, 'trapz', None))
 from scipy.integrate import solve_ivp
 try:
     import matplotlib.pyplot as plt
@@ -212,7 +213,7 @@ class QSwitchActive(FourLevelLaser):
         S = sol.y[1]; t = sol.t
         P = np.array([self.cav.output_power(s) for s in S])
         i_pk = int(np.argmax(P)); peak = P[i_pk]
-        energy = np.trapz(P, t)
+        energy = trapz(P, t)
         half = peak / 2.0
         above = np.where(P >= half)[0]
         fwhm = (t[above[-1]] - t[above[0]]) if len(above) > 1 else 0.0

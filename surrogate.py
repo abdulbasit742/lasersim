@@ -143,17 +143,29 @@ class _SklearnSurrogate:
             MLPRegressor(hidden_layer_sizes=(64, 64), max_iter=2000,
                          random_state=0, early_stopping=True))
         self.models = {}
+        self.scalers = {}
 
     def fit(self, X, Y, ynames):
+        from sklearn.preprocessing import StandardScaler
+        import numpy as np
         self.ynames = ynames
         for j, name in enumerate(ynames):
             mdl = self._make()
-            mdl.fit(X, [row[j] for row in Y])
+            y_col = np.array([row[j] for row in Y]).reshape(-1, 1)
+            scaler = StandardScaler()
+            y_scaled = scaler.fit_transform(y_col).ravel()
+            mdl.fit(X, y_scaled)
             self.models[name] = mdl
+            self.scalers[name] = scaler
 
     def predict_one(self, v) -> Dict[str, float]:
-        return {name: float(self.models[name].predict([v])[0])
-                for name in self.ynames}
+        import numpy as np
+        out = {}
+        for name in self.ynames:
+            pred_scaled = self.models[name].predict([v])
+            pred = self.scalers[name].inverse_transform(pred_scaled.reshape(-1, 1))
+            out[name] = float(pred[0, 0])
+        return out
 
 
 def build_surrogate(n_train=800, n_test=200, sp=None, full=False,

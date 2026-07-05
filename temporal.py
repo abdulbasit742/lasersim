@@ -36,6 +36,7 @@ from dataclasses import dataclass
 from typing import Tuple
 
 import numpy as np
+trapz = getattr(np, 'trapezoid', getattr(np, 'trapz', None))
 
 try:
     import matplotlib.pyplot as plt
@@ -66,7 +67,7 @@ def frantz_nodvik_temporal(phi_in: np.ndarray, t: np.ndarray,
     Returns (phi_out_normalized, energy_gain)."""
     dt = t[1] - t[0]
     # normalize input shape to carry E_in_J of fluence
-    norm = np.trapz(phi_in, t)
+    norm = trapz(phi_in, t)
     flux_in = phi_in / norm * E_in_J          # J/s per unit area (arbitrary area)
     U_in = np.cumsum(flux_in) * dt            # integrated input fluence up to t
     sat = np.exp(-U_in / U_sat)
@@ -76,15 +77,15 @@ def frantz_nodvik_temporal(phi_in: np.ndarray, t: np.ndarray,
     # use the clean closed form with G0 as small-signal gain exp(g0 L):
     g0L = np.log(max(G0, 1.0000001))
     flux_out = flux_in * np.exp(g0L) / (1.0 + (np.exp(g0L) - 1.0) * (U_in / U_sat))
-    e_in = np.trapz(flux_in, t)
-    e_out = np.trapz(flux_out, t)
+    e_in = trapz(flux_in, t)
+    e_out = trapz(flux_out, t)
     return flux_out, e_out / e_in
 
 
 def pulse_metrics(t, shape):
     """Return (center_of_mass_ps, fwhm_ps)."""
     p = np.clip(shape, 0, None)
-    com = np.trapz(t * p, t) / np.trapz(p, t)
+    com = trapz(t * p, t) / trapz(p, t)
     half = p.max() / 2
     above = np.where(p >= half)[0]
     fwhm = (t[above[-1]] - t[above[0]]) if len(above) > 1 else 0.0
@@ -107,7 +108,7 @@ def main():
     E_in = args.ein * U_sat
     flux_out, egain = frantz_nodvik_temporal(phi_in, t, args.g0, U_sat, E_in)
 
-    flux_in = phi_in / np.trapz(phi_in, t) * E_in
+    flux_in = phi_in / trapz(phi_in, t) * E_in
     com_in, fwhm_in = pulse_metrics(t, flux_in)
     com_out, fwhm_out = pulse_metrics(t, flux_out)
 

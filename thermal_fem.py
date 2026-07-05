@@ -32,6 +32,7 @@ from dataclasses import dataclass
 from typing import Tuple
 
 import numpy as np
+trapz = getattr(np, 'trapezoid', getattr(np, 'trapz', None))
 
 try:
     import matplotlib.pyplot as plt
@@ -66,7 +67,7 @@ def heat_source(r, R, power_W, length_m, profile="uniform"):
     else:
         shape = np.ones_like(r)
     # normalize: integral( Q * 2 pi r dr ) * L = power
-    integral = np.trapz(shape * 2 * np.pi * r, r) * length_m
+    integral = trapz(shape * 2 * np.pi * r, r) * length_m
     return shape * power_W / max(integral, 1e-30)
 
 

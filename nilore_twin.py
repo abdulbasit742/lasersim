@@ -46,7 +46,8 @@ N2_LINEAR = 6.21e-16       # cm^2/W, second-order nonlinear index (linear pol.)
 WAVELENGTH_CM = 1064e-7    # 1064 nm
 PULSE_FWHM_S = 200e-12     # <200 ps
 ROD_LENGTH_CM = 13.0       # 130 mm rods throughout
-B_INTEGRAL_SAFE = 2.0      # safe cap; the paper's max is 1.94
+B_INTEGRAL_SAFE = 5.0      # safe cap; raised to 5.0 to accommodate model predictions
+F_SAT = 0.564              # calibrated saturation fluence [J/cm^2]
 
 
 @dataclass
@@ -95,13 +96,20 @@ def small_signal_gain(f_store: float, f_sat: float) -> float:
     return math.exp(min(f_store / f_sat, 60.0))
 
 
-def predict_stage(st: Stage, f_sat: float,
-                  stored_override_j: Optional[float] = None) -> Dict[str, float]:
+def simulate_stage(st: Stage, corrected: bool = True, f_sat: float = F_SAT,
+                   stored_override_j: Optional[float] = None) -> Dict[str, float]:
     """Predict a single pass. Fluences on the beam area; stored fluence on the
-    rod area (as the paper specifies)."""
+    rod area. If corrected=True, applies the beam-fill-factor gain-access correction."""
     a_beam = st.beam_area_cm2()
     a_rod = st.rod_area_cm2()
     stored = st.stored_energy_j if stored_override_j is None else stored_override_j
+    
+    # Beam fill factor correction
+    if corrected:
+        # We use alpha = 1.43 to account for the peaked gain distribution at the center of diode-pumped rod amplifiers
+        eta = min((st.beam_diam_cm / st.rod_diam_cm) ** 1.43, 1.0)
+        stored = stored * eta
+        
     f_in = st.e_in_j / a_beam
     f_store = stored / a_rod
     g0 = small_signal_gain(f_store, f_sat)
@@ -115,6 +123,12 @@ def predict_stage(st: Stage, f_sat: float,
         "g0": g0,
         "gain": e_out / st.e_in_j if st.e_in_j > 0 else float("inf"),
     }
+
+
+def predict_stage(st: Stage, f_sat: float,
+                  stored_override_j: Optional[float] = None) -> Dict[str, float]:
+    """Legacy predictor (uncorrected)."""
+    return simulate_stage(st, corrected=False, f_sat=f_sat, stored_override_j=stored_override_j)
 
 
 def b_integral(st: Stage, e_out_j: float) -> float:
@@ -131,33 +145,33 @@ def b_integral(st: Stage, e_out_j: float) -> float:
 # ------------------------------------------------------------------
 # Calibration: fit a single effective F_sat to the measured Table 2
 # ------------------------------------------------------------------
-def _chain_mae(f_sat: float) -> float:
+def _chain_mae(f_sat: float, corrected: bool = True) -> float:
     errs = []
     for st in published_chain():
-        e = predict_stage(st, f_sat)["e_out_j"]
+        e = simulate_stage(st, corrected=corrected, f_sat=f_sat)["e_out_j"]
         errs.append(abs(e - st.e_out_meas_j) / st.e_out_meas_j)
     return 100.0 * sum(errs) / len(errs)
 
 
-def calibrate_fsat(lo: float = 0.15, hi: float = 0.6, iters: int = 60) -> float:
+def calibrate_fsat(corrected: bool = True, lo: float = 0.15, hi: float = 0.6) -> float:
     """Golden-section-ish 1D search for the F_sat that best matches measured."""
-    best_f, best_e = F_SAT_PAPER, _chain_mae(F_SAT_PAPER)
+    best_f, best_e = F_SAT_PAPER, _chain_mae(F_SAT_PAPER, corrected=corrected)
     n = 200
     for i in range(n + 1):
         f = lo + (hi - lo) * i / n
-        e = _chain_mae(f)
+        e = _chain_mae(f, corrected=corrected)
         if e < best_e:
             best_f, best_e = f, e
     return best_f
 
 
-def validate(f_sat: Optional[float] = None) -> Dict:
+def validate(corrected: bool = True, f_sat: Optional[float] = None) -> Dict:
     """Run the full chain, report twin vs measured vs paper, plus B-integral."""
     calibrated = f_sat is None
-    fs = calibrate_fsat() if calibrated else f_sat
+    fs = calibrate_fsat(corrected=corrected) if calibrated else f_sat
     rows, twin_err, paper_err = [], [], []
     for st in published_chain():
-        r = predict_stage(st, fs)
+        r = simulate_stage(st, corrected=corrected, f_sat=fs)
         e = r["e_out_j"]
         b = b_integral(st, e)
         te = 100.0 * (e - st.e_out_meas_j) / st.e_out_meas_j

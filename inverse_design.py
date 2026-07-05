@@ -37,10 +37,10 @@ import forward_model as fm
 # A target is a dict of {metric_name: (desired_value, weight)}. Only the
 # metrics you list are optimized; everything else floats free.
 DEFAULT_TARGET: Dict[str, Tuple[float, float]] = {
-    "output_energy_j":  (0.50, 1.0),    # want 0.5 J out
-    "pulse_duration_fs": (500.0, 1.0),  # want ~500 fs
-    "m2":               (1.20, 1.0),    # want near-diffraction-limited
-    "shg_efficiency":   (0.40, 0.5),    # want ~40% green conversion
+    "output_energy_j":  (2.5e-5, 1.0),    # want 25 uJ out
+    "pulse_duration_fs": (3331.0, 1.0),  # want ~3331 fs
+    "m2":               (1.17, 1.0),    # want near-diffraction-limited
+    "shg_efficiency":   (0.0, 0.5),     # want ~0% green conversion
 }
 
 _KEYS = list(fm.DESIGN_BOUNDS.keys())

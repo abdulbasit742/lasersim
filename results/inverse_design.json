@@ -1,0 +1,49 @@
+{
+  "design": {
+    "pump_power_w": 400.0,
+    "crystal_length_cm": 7.885909143834388,
+    "seed_energy_nj": 4966.909511819495,
+    "residual_gdd_fs2": 56629.012382390974,
+    "shg_length_mm": 4.857044006649939
+  },
+  "metrics": {
+    "output_energy_j": 2.4999999999716967e-05,
+    "output_fluence_j_cm2": 0.0003536776513113189,
+    "pulse_duration_fs": 3331.0000000873806,
+    "peak_power_w": 7054938.4566549035,
+    "m2": 1.1657142857142857,
+    "shg_efficiency": 6.488153133713781e-17,
+    "green_energy_j": 1.6220382834100817e-21,
+    "small_signal_gain": 5.034380814200531,
+    "damage_margin_j_cm2": 9.999646322348688,
+    "damage_safe": 1.0
+  },
+  "target_report": {
+    "metric": [
+      "output_energy_j",
+      "pulse_duration_fs",
+      "m2",
+      "shg_efficiency"
+    ],
+    "target": [
+      2.5e-05,
+      3331.0,
+      1.17,
+      0.0
+    ],
+    "achieved": [
+      2.4999999999716967e-05,
+      3331.0000000873806,
+      1.1657142857142857,
+      6.488153133713781e-17
+    ],
+    "rel_error_pct": [
+      -1.1321374610365198e-09,
+      2.623254667293181e-09,
+      -0.3663003663003612,
+      6.488153133713781e-15
+    ]
+  },
+  "engine": "scipy-de+nm",
+  "cost": 1.341759583517788e-05
+}
