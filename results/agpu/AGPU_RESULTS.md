@@ -1,6 +1,6 @@
 # AGPU Autonomous Research Loop Results
 
-Generated: 2026-07-07 22:54:58  |  Iteration: 397
+Generated: 2026-07-07 22:55:33  |  Iteration: 398
 
 This file is auto-updated by the AGPU research daemon each loop.
 
@@ -14,7 +14,7 @@ This file is auto-updated by the AGPU research daemon each loop.
 
 ## Stage B: Architecture Ablation
 - Configs tested: 9
-- Best: width=512, depth=4, params=793,605, mean R²=0.999884
+- Best: width=512, depth=4, params=793,605, mean R²=0.999895
 
 ## Stage C: Uncertainty Calibration Audit
 
