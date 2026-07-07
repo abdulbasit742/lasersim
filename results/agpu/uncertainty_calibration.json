@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-07-07 21:55:41",
+  "n_test": 5000,
+  "metrics_coverage": {
+    "output_energy_j": {
+      "physics_mu": 4.143573823761692e-06,
+      "physics_std": 3.192687147603029e-06,
+      "physics_cv_pct": 77.05153288917603,
+      "reported_surr_sigma": null
+    },
+    "pulse_duration_fs": {
+      "physics_mu": 3330.790721905155,
+      "physics_std": 0.11166495559760174,
+      "physics_cv_pct": 0.003352505903875321,
+      "reported_surr_sigma": null
+    },
+    "m2": {
+      "physics_mu": 1.0846679798571184,
+      "physics_std": 0.04720085461330679,
+      "physics_cv_pct": 4.351640823722342,
+      "reported_surr_sigma": null
+    },
+    "shg_efficiency": {
+      "physics_mu": 0.006176747546899662,
+      "physics_std": 0.008341318267956924,
+      "physics_cv_pct": 135.0438593227554,
+      "reported_surr_sigma": null
+    },
+    "peak_power_w": {
+      "physics_mu": 1169379.778104011,
+      "physics_std": 901023.8653394318,
+      "physics_cv_pct": 77.051432067717,
+      "reported_surr_sigma": null
+    }
+  },
+  "source_inverse": "results/neural_inverse.json",
+  "note": "Calibration: surrogate ensemble sigma vs physics output std over random test points"
+}
