@@ -1,0 +1,40 @@
+# Digital Twin Nd:YAG Laser Paper Compilation Guide
+
+This directory contains the source files for the paper:
+**"An Open-Source Physics-Constrained Digital Twin and Neural Surrogate for Multi-Pass Nd:YAG Laser Amplifier Chains"**
+
+## Prerequisites
+
+To compile the LaTeX source into a PDF, you need a TeX distribution installed on your system (such as TeX Live, MiKTeX, or MacTeX) that includes the `revtex4-2` document class.
+
+## Compilation Commands
+
+Run the following commands in your terminal from the `results/paper/` directory:
+
+```bash
+# 1. First pass compilation to generate auxiliary files
+pdflatex main.tex
+
+# 2. Parse the bibliography references from refs.bib
+bibtex main.aux
+
+# 3. Compile again to integrate the citations
+pdflatex main.tex
+
+# 4. Final compile to resolve all cross-references and page numbers
+pdflatex main.tex
+```
+
+Alternatively, you can import this directory directly into **Overleaf** (https://www.overleaf.com) as a zip file, and click "Recompile".
+
+## Directory Structure
+
+* `main.tex`: Full LaTeX source file containing the paper text and tables.
+* `refs.bib`: BibTeX bibliography database with all 7 verified references.
+* `figs/`: Directory containing the 6 result figures embedded in the paper:
+  - `twin_parity.png`
+  - `stage_error_bar.png`
+  - `shg_curve.png`
+  - `surrogate_learning_curve.png`
+  - `surrogate_parity_energy.png`
+  - `beam_3d.png`
