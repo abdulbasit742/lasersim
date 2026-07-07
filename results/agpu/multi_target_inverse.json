@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-07-07 21:55:45",
+  "timestamp": "2026-07-07 21:57:04",
   "n_trials_per_target": 20000,
   "results": [
     {
@@ -9,20 +9,20 @@
         "shg_efficiency": 0.01,
         "m2": 1.2
       },
-      "best_cost_rmse": 0.02887858372410986,
+      "best_cost_rmse": 0.02231716248529071,
       "best_design": {
-        "pump_power_w": 340.34855181923064,
-        "crystal_length_cm": 3.4157810081009927,
-        "seed_energy_nj": 2775.4804743321947,
-        "residual_gdd_fs2": 33783.41960094485,
-        "shg_length_mm": 13.440503800192268
+        "pump_power_w": 372.75854443693834,
+        "crystal_length_cm": 6.708476759297983,
+        "seed_energy_nj": 1396.7041399282703,
+        "residual_gdd_fs2": 47710.43596031567,
+        "shg_length_mm": 13.460698632476582
       },
       "achieved_metrics": {
-        "output_energy_j": 5.035393459847854e-06,
-        "pulse_duration_fs": 3330.7851435415237,
-        "m2": 1.1410015428965385,
-        "shg_efficiency": 0.009941199291869368,
-        "peak_power_w": 1421067.3004336266
+        "output_energy_j": 5.0299066800268005e-06,
+        "pulse_duration_fs": 3330.9032047618925,
+        "m2": 1.1544285398381602,
+        "shg_efficiency": 0.009959753507955927,
+        "peak_power_w": 1419468.5310776473
       }
     },
     {
@@ -32,20 +32,20 @@
         "shg_efficiency": 0.5,
         "m2": 1.3
       },
-      "best_cost_rmse": 0.5708854174817902,
+      "best_cost_rmse": 0.571131695521542,
       "best_design": {
-        "pump_power_w": 390.6236155505766,
-        "crystal_length_cm": 1.9554648766743017,
-        "seed_energy_nj": 1382.0976598396169,
-        "residual_gdd_fs2": 13310.345743994121,
-        "shg_length_mm": 19.596350575401466
+        "pump_power_w": 378.9495828340197,
+        "crystal_length_cm": 3.1732013321205423,
+        "seed_energy_nj": 1093.417145958959,
+        "residual_gdd_fs2": 50264.25361333197,
+        "shg_length_mm": 19.580917936791444
       },
       "achieved_metrics": {
-        "output_energy_j": 2.0441686681422817e-06,
-        "pulse_duration_fs": 3330.684847216237,
-        "m2": 1.161829783585239,
-        "shg_efficiency": 0.008587162608105584,
-        "peak_power_w": 576913.9489915224
+        "output_energy_j": 2.024754189185251e-06,
+        "pulse_duration_fs": 3330.929231437822,
+        "m2": 1.1569933986026653,
+        "shg_efficiency": 0.008492133523774566,
+        "peak_power_w": 571392.7872951459
       }
     },
     {
@@ -55,20 +55,20 @@
         "shg_efficiency": 0.1,
         "m2": 1.05
       },
-      "best_cost_rmse": 0.4979193279358894,
+      "best_cost_rmse": 0.4982984363007341,
       "best_design": {
-        "pump_power_w": 56.41993214613354,
-        "crystal_length_cm": 3.3108965307109512,
-        "seed_energy_nj": 3059.3941825470683,
-        "residual_gdd_fs2": 7103.55864697938,
-        "shg_length_mm": 19.996423244027074
+        "pump_power_w": 47.970932741511646,
+        "crystal_length_cm": 4.241053298627965,
+        "seed_energy_nj": 2950.2834204066194,
+        "residual_gdd_fs2": 48379.52800874872,
+        "shg_length_mm": 19.967605601207428
       },
       "achieved_metrics": {
-        "output_energy_j": 3.3666895862449577e-06,
-        "pulse_duration_fs": 3330.671666504079,
-        "m2": 1.0233739718891124,
-        "shg_efficiency": 0.014666079554494225,
-        "peak_power_w": 950165.1702558728
+        "output_energy_j": 3.2744301082905716e-06,
+        "pulse_duration_fs": 3330.9098925127187,
+        "m2": 1.019873672135769,
+        "shg_efficiency": 0.014226298219132122,
+        "peak_power_w": 924061.1127643659
       }
     },
     {
@@ -78,20 +78,20 @@
         "shg_efficiency": 0.05,
         "peak_power_w": 2000000.0
       },
-      "best_cost_rmse": 0.24890166001171077,
+      "best_cost_rmse": 0.2523043905102291,
       "best_design": {
-        "pump_power_w": 203.05675499268037,
-        "crystal_length_cm": 4.69133418818953,
-        "seed_energy_nj": 4274.437600579769,
-        "residual_gdd_fs2": 40762.652150137204,
-        "shg_length_mm": 19.99507263324745
+        "pump_power_w": 392.76037112796195,
+        "crystal_length_cm": 2.0836368493943938,
+        "seed_energy_nj": 4622.671306896426,
+        "residual_gdd_fs2": 52689.39553831473,
+        "shg_length_mm": 19.865294594698057
       },
       "achieved_metrics": {
-        "output_energy_j": 6.963890187285417e-06,
-        "pulse_duration_fs": 3330.8392639315775,
-        "m2": 1.0841235127826818,
-        "shg_efficiency": 0.030015820466188184,
-        "peak_power_w": 1965287.5018416862
+        "output_energy_j": 7.030645877408039e-06,
+        "pulse_duration_fs": 3330.9552025434264,
+        "m2": 1.16271501089587,
+        "shg_efficiency": 0.029912531136002264,
+        "peak_power_w": 1984057.6419992833
       }
     },
     {
@@ -101,20 +101,20 @@
         "pulse_duration_fs": 150.0,
         "m2": 1.1
       },
-      "best_cost_rmse": 12.242392488037588,
+      "best_cost_rmse": 12.242392984458805,
       "best_design": {
-        "pump_power_w": 259.0040490021496,
-        "crystal_length_cm": 4.583673987386226,
-        "seed_energy_nj": 542.9044047244737,
-        "residual_gdd_fs2": 1622.8479365330895,
-        "shg_length_mm": 1.0069501314679274
+        "pump_power_w": 236.23804542105938,
+        "crystal_length_cm": 5.580572956075662,
+        "seed_energy_nj": 515.3071366535373,
+        "residual_gdd_fs2": 248.48425520488826,
+        "shg_length_mm": 13.538871847801254
       },
       "achieved_metrics": {
-        "output_energy_j": 9.974904944779858e-07,
-        "pulse_duration_fs": 3330.666691201961,
-        "m2": 1.1073016774437476,
-        "shg_efficiency": 1.1127610994274501e-05,
-        "peak_power_w": 281517.5313957739
+        "output_energy_j": 1.012598277995178e-06,
+        "pulse_duration_fs": 3330.6664236549923,
+        "m2": 1.0978700473887246,
+        "shg_efficiency": 0.0020393495185078,
+        "peak_power_w": 285781.3603173561
       }
     }
   ]
