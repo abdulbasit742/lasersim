@@ -1,6 +1,6 @@
 # AGPU Autonomous Research Loop Results
 
-Generated: 2026-07-07 21:55:41  |  Iteration: 3
+Generated: 2026-07-07 21:55:45  |  Iteration: 4
 
 This file is auto-updated by the AGPU research daemon each loop.
 
@@ -23,3 +23,13 @@ This file is auto-updated by the AGPU research daemon each loop.
 - m2: physics CV=4.4%
 - shg_efficiency: physics CV=135.0%
 - peak_power_w: physics CV=77.1%
+
+## Stage D: Multi-Target Inverse Design
+
+| Target | RMSE | Energy (µJ) | SHG% |
+|--------|------|-------------|------|
+| high_energy | 0.0289 | 5.04 | 1.0 |
+| high_shg | 0.5709 | 2.04 | 0.9 |
+| low_diverge | 0.4979 | 3.37 | 1.5 |
+| high_power | 0.2489 | 6.96 | 3.0 |
+| short_pulse | 12.2424 | 1.00 | 0.0 |
