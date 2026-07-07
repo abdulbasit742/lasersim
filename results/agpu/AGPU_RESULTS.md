@@ -1,6 +1,6 @@
 # AGPU Autonomous Research Loop Results
 
-Generated: 2026-07-07 21:55:45  |  Iteration: 4
+Generated: 2026-07-07 21:55:53  |  Iteration: 6
 
 This file is auto-updated by the AGPU research daemon each loop.
 
@@ -33,3 +33,9 @@ This file is auto-updated by the AGPU research daemon each loop.
 | low_diverge | 0.4979 | 3.37 | 1.5 |
 | high_power | 0.2489 | 6.96 | 3.0 |
 | short_pulse | 12.2424 | 1.00 | 0.0 |
+
+## Stage F: Damage-Constrained Design Envelope
+- Safe designs: 63/63
+  - pump=400W crystal=8.0cm E=1.62µJ
+  - pump=350W crystal=8.0cm E=1.05µJ
+  - pump=300W crystal=8.0cm E=0.91µJ

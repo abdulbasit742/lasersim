@@ -1,0 +1,554 @@
+{
+  "timestamp": "2026-07-07 21:55:53",
+  "damage_fluence_limit_jcm2": 5.0,
+  "envelope": [
+    {
+      "pump_w": 20,
+      "crystal_cm": 0.5,
+      "mean_energy_j": 2.600384710186145e-07,
+      "mean_shg_eff": 0.00028268937644942917,
+      "mean_damage_fraction": 6.621825289067372e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 20,
+      "crystal_cm": 1.0,
+      "mean_energy_j": 2.8090795642790356e-07,
+      "mean_shg_eff": 0.0003500165467242904,
+      "mean_damage_fraction": 7.153262371094978e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 20,
+      "crystal_cm": 2.0,
+      "mean_energy_j": 2.6833525719759175e-07,
+      "mean_shg_eff": 0.00036054389352649217,
+      "mean_damage_fraction": 6.833101214213089e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 20,
+      "crystal_cm": 3.0,
+      "mean_energy_j": 2.5753424473464686e-07,
+      "mean_shg_eff": 0.00024658384000533377,
+      "mean_damage_fraction": 6.558055690393112e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 20,
+      "crystal_cm": 4.0,
+      "mean_energy_j": 2.3219016970547452e-07,
+      "mean_shg_eff": 0.0002407652327843355,
+      "mean_damage_fraction": 5.912674119355568e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 20,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 2.2337733060442956e-07,
+      "mean_shg_eff": 0.00022752887818614612,
+      "mean_damage_fraction": 5.688257014458797e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 20,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 2.1105135305180153e-07,
+      "mean_shg_eff": 0.00022796364889568626,
+      "mean_damage_fraction": 5.374378573508316e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 50,
+      "crystal_cm": 0.5,
+      "mean_energy_j": 2.3315556639421693e-07,
+      "mean_shg_eff": 0.0002757346534675896,
+      "mean_damage_fraction": 5.9372577441648385e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 50,
+      "crystal_cm": 1.0,
+      "mean_energy_j": 2.8314653989405506e-07,
+      "mean_shg_eff": 0.0003971767876837588,
+      "mean_damage_fraction": 7.210267430960865e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 50,
+      "crystal_cm": 2.0,
+      "mean_energy_j": 2.299205885439147e-07,
+      "mean_shg_eff": 0.00029295296832446404,
+      "mean_damage_fraction": 5.854879709657891e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 50,
+      "crystal_cm": 3.0,
+      "mean_energy_j": 2.874102706169172e-07,
+      "mean_shg_eff": 0.0003143724449760093,
+      "mean_damage_fraction": 7.318842442249871e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 50,
+      "crystal_cm": 4.0,
+      "mean_energy_j": 3.1652833895544644e-07,
+      "mean_shg_eff": 0.0003849983059957952,
+      "mean_damage_fraction": 8.060327963748197e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 50,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 2.6833994006009484e-07,
+      "mean_shg_eff": 0.00030669182881230204,
+      "mean_damage_fraction": 6.833220462327519e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 50,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 3.6174644940290615e-07,
+      "mean_shg_eff": 0.0004981853315919651,
+      "mean_damage_fraction": 9.211797690946356e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 100,
+      "crystal_cm": 0.5,
+      "mean_energy_j": 2.3173761198640136e-07,
+      "mean_shg_eff": 0.00021700655288091746,
+      "mean_damage_fraction": 5.901149831671589e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 100,
+      "crystal_cm": 1.0,
+      "mean_energy_j": 2.8316921091732266e-07,
+      "mean_shg_eff": 0.00034142470512002075,
+      "mean_damage_fraction": 7.2108447438277425e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 100,
+      "crystal_cm": 2.0,
+      "mean_energy_j": 2.9829259272122413e-07,
+      "mean_shg_eff": 0.0003655205761412197,
+      "mean_damage_fraction": 7.595958499084853e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 100,
+      "crystal_cm": 3.0,
+      "mean_energy_j": 2.802045634057917e-07,
+      "mean_shg_eff": 0.00031542283820745125,
+      "mean_damage_fraction": 7.135350614870103e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 100,
+      "crystal_cm": 4.0,
+      "mean_energy_j": 2.797955115226206e-07,
+      "mean_shg_eff": 0.00036553271464128913,
+      "mean_damage_fraction": 7.1249341942000695e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 100,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 3.0060595885061917e-07,
+      "mean_shg_eff": 0.0003720449386439239,
+      "mean_damage_fraction": 7.654867883832788e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 100,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 4.4227087699321845e-07,
+      "mean_shg_eff": 0.0005590482428715864,
+      "mean_damage_fraction": 1.1262335401449335e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 150,
+      "crystal_cm": 0.5,
+      "mean_energy_j": 2.883079393181886e-07,
+      "mean_shg_eff": 0.0003978147429387325,
+      "mean_damage_fraction": 7.341701388020469e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 150,
+      "crystal_cm": 1.0,
+      "mean_energy_j": 2.8463984135772705e-07,
+      "mean_shg_eff": 0.00036531634711428433,
+      "mean_damage_fraction": 7.248294040476025e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 150,
+      "crystal_cm": 2.0,
+      "mean_energy_j": 4.018011650955847e-07,
+      "mean_shg_eff": 0.0005483872203756728,
+      "mean_damage_fraction": 1.0231782650407205e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 150,
+      "crystal_cm": 3.0,
+      "mean_energy_j": 2.821822560018004e-07,
+      "mean_shg_eff": 0.0004108276597040231,
+      "mean_damage_fraction": 7.185712143281469e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 150,
+      "crystal_cm": 4.0,
+      "mean_energy_j": 4.077461458350694e-07,
+      "mean_shg_eff": 0.0005147699599562318,
+      "mean_damage_fraction": 1.0383170341811217e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 150,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 4.78104759694351e-07,
+      "mean_shg_eff": 0.0005782504221011787,
+      "mean_damage_fraction": 1.2174837731378996e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 150,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 5.76356418648679e-07,
+      "mean_shg_eff": 0.0007424437083033416,
+      "mean_damage_fraction": 1.467679568170866e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 200,
+      "crystal_cm": 0.5,
+      "mean_energy_j": 2.8779743639068017e-07,
+      "mean_shg_eff": 0.00030591216111914546,
+      "mean_damage_fraction": 7.328701537720333e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 200,
+      "crystal_cm": 1.0,
+      "mean_energy_j": 2.2652415702236504e-07,
+      "mean_shg_eff": 0.0002850239779968691,
+      "mean_damage_fraction": 5.768390291173451e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 200,
+      "crystal_cm": 2.0,
+      "mean_energy_j": 3.8911305091403137e-07,
+      "mean_shg_eff": 0.0005863582760915906,
+      "mean_damage_fraction": 9.90868247592583e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 200,
+      "crystal_cm": 3.0,
+      "mean_energy_j": 3.675528213836161e-07,
+      "mean_shg_eff": 0.00040561477336370776,
+      "mean_damage_fraction": 9.359655739292001e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 200,
+      "crystal_cm": 4.0,
+      "mean_energy_j": 3.03375517996259e-07,
+      "mean_shg_eff": 0.00033722093611365003,
+      "mean_damage_fraction": 7.725394128347019e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 200,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 5.166313892266463e-07,
+      "mean_shg_eff": 0.0005710127798857509,
+      "mean_damage_fraction": 1.3155910296296593e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 200,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 4.696938206512679e-07,
+      "mean_shg_eff": 0.0006584130487580617,
+      "mean_damage_fraction": 1.1960654927418791e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 250,
+      "crystal_cm": 0.5,
+      "mean_energy_j": 2.4372653457574576e-07,
+      "mean_shg_eff": 0.00026837206709341227,
+      "mean_damage_fraction": 6.206445238462029e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 250,
+      "crystal_cm": 1.0,
+      "mean_energy_j": 2.7307377919818336e-07,
+      "mean_shg_eff": 0.000266752437506013,
+      "mean_damage_fraction": 6.953766686108107e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 250,
+      "crystal_cm": 2.0,
+      "mean_energy_j": 3.302037363476614e-07,
+      "mean_shg_eff": 0.00035186398858906033,
+      "mean_damage_fraction": 8.408569098742923e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 250,
+      "crystal_cm": 3.0,
+      "mean_energy_j": 3.776426369415488e-07,
+      "mean_shg_eff": 0.0005381242860986529,
+      "mean_damage_fraction": 9.616590782640877e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 250,
+      "crystal_cm": 4.0,
+      "mean_energy_j": 4.243241389103721e-07,
+      "mean_shg_eff": 0.00040194318026245105,
+      "mean_damage_fraction": 1.0805325468927643e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 250,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 5.384543868089324e-07,
+      "mean_shg_eff": 0.0006817298178539628,
+      "mean_damage_fraction": 1.3711628366425124e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 250,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 8.077645836518667e-07,
+      "mean_shg_eff": 0.0011284011299162243,
+      "mean_damage_fraction": 2.0569556214841816e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 300,
+      "crystal_cm": 0.5,
+      "mean_energy_j": 2.6845905540879644e-07,
+      "mean_shg_eff": 0.00028910274531453314,
+      "mean_damage_fraction": 6.836253709774555e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 300,
+      "crystal_cm": 1.0,
+      "mean_energy_j": 2.50873966343394e-07,
+      "mean_shg_eff": 0.0002686702135194506,
+      "mean_damage_fraction": 6.388453093859348e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 300,
+      "crystal_cm": 2.0,
+      "mean_energy_j": 3.7497524727644403e-07,
+      "mean_shg_eff": 0.00036566936879233114,
+      "mean_damage_fraction": 9.548666262584296e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 300,
+      "crystal_cm": 3.0,
+      "mean_energy_j": 4.3317671827493686e-07,
+      "mean_shg_eff": 0.0005208140537984478,
+      "mean_damage_fraction": 1.1030754551325045e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 300,
+      "crystal_cm": 4.0,
+      "mean_energy_j": 4.917119380093922e-07,
+      "mean_shg_eff": 0.0005004208790994717,
+      "mean_damage_fraction": 1.2521341681838463e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 300,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 5.934594743903888e-07,
+      "mean_shg_eff": 0.000532267002958432,
+      "mean_damage_fraction": 1.511232141983175e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 300,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 9.116378525095646e-07,
+      "mean_shg_eff": 0.001357946539563673,
+      "mean_damage_fraction": 2.3214667285852386e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 350,
+      "crystal_cm": 0.5,
+      "mean_energy_j": 2.689617719903922e-07,
+      "mean_shg_eff": 0.00033271729214896063,
+      "mean_damage_fraction": 6.849055282404192e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 350,
+      "crystal_cm": 1.0,
+      "mean_energy_j": 3.0282361611820683e-07,
+      "mean_shg_eff": 0.0003517017220451519,
+      "mean_damage_fraction": 7.711340062428025e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 350,
+      "crystal_cm": 2.0,
+      "mean_energy_j": 3.811389870924862e-07,
+      "mean_shg_eff": 0.0004788897362010875,
+      "mean_damage_fraction": 9.705624608129161e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 350,
+      "crystal_cm": 3.0,
+      "mean_energy_j": 3.7398261914003084e-07,
+      "mean_shg_eff": 0.0003757665872527203,
+      "mean_damage_fraction": 9.523389194654334e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 350,
+      "crystal_cm": 4.0,
+      "mean_energy_j": 5.267147422921858e-07,
+      "mean_shg_eff": 0.0005999928172531789,
+      "mean_damage_fraction": 1.3412680773628025e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 350,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 7.217123760046654e-07,
+      "mean_shg_eff": 0.0008171598207040529,
+      "mean_damage_fraction": 1.8378254741078254e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 350,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 1.052773517615781e-06,
+      "mean_shg_eff": 0.001607085072135991,
+      "mean_damage_fraction": 2.6808657485567057e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 400,
+      "crystal_cm": 0.5,
+      "mean_energy_j": 2.453177652479243e-07,
+      "mean_shg_eff": 0.0003418659781440186,
+      "mean_damage_fraction": 6.2469655947942924e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 400,
+      "crystal_cm": 1.0,
+      "mean_energy_j": 3.342544235820033e-07,
+      "mean_shg_eff": 0.00041338215264137427,
+      "mean_damage_fraction": 8.51171900214528e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 400,
+      "crystal_cm": 2.0,
+      "mean_energy_j": 3.3760121185403866e-07,
+      "mean_shg_eff": 0.0004109667505736344,
+      "mean_damage_fraction": 8.596944265661505e-06,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 400,
+      "crystal_cm": 3.0,
+      "mean_energy_j": 5.762945215906477e-07,
+      "mean_shg_eff": 0.0007755798221245855,
+      "mean_damage_fraction": 1.4675219486068895e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 400,
+      "crystal_cm": 4.0,
+      "mean_energy_j": 6.071281662694263e-07,
+      "mean_shg_eff": 0.0008070235187482309,
+      "mean_damage_fraction": 1.546039180033557e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 400,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 8.945009799157728e-07,
+      "mean_shg_eff": 0.000996892213311199,
+      "mean_damage_fraction": 2.2778280408662305e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 400,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 1.6190434525096228e-06,
+      "mean_shg_eff": 0.0019298524287133703,
+      "mean_damage_fraction": 4.122860296759596e-05,
+      "damage_safe": true
+    }
+  ],
+  "best_safe_designs": [
+    {
+      "pump_w": 400,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 1.6190434525096228e-06,
+      "mean_shg_eff": 0.0019298524287133703,
+      "mean_damage_fraction": 4.122860296759596e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 350,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 1.052773517615781e-06,
+      "mean_shg_eff": 0.001607085072135991,
+      "mean_damage_fraction": 2.6808657485567057e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 300,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 9.116378525095646e-07,
+      "mean_shg_eff": 0.001357946539563673,
+      "mean_damage_fraction": 2.3214667285852386e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 400,
+      "crystal_cm": 6.0,
+      "mean_energy_j": 8.945009799157728e-07,
+      "mean_shg_eff": 0.000996892213311199,
+      "mean_damage_fraction": 2.2778280408662305e-05,
+      "damage_safe": true
+    },
+    {
+      "pump_w": 250,
+      "crystal_cm": 8.0,
+      "mean_energy_j": 8.077645836518667e-07,
+      "mean_shg_eff": 0.0011284011299162243,
+      "mean_damage_fraction": 2.0569556214841816e-05,
+      "damage_safe": true
+    }
+  ],
+  "n_safe": 63,
+  "n_total": 63
+}
