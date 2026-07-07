@@ -1,6 +1,6 @@
 # AGPU Autonomous Research Loop Results
 
-Generated: 2026-07-07 21:57:04  |  Iteration: 4
+Generated: 2026-07-07 21:57:07  |  Iteration: 5
 
 This file is auto-updated by the AGPU research daemon each loop.
 
@@ -33,3 +33,6 @@ This file is auto-updated by the AGPU research daemon each loop.
 | low_diverge | 0.4983 | 3.27 | 1.4 |
 | high_power | 0.2523 | 7.03 | 3.0 |
 | short_pulse | 12.2424 | 1.01 | 0.2 |
+
+## Stage E: Sensitivity Analysis
+- Knob ranking by output energy sensitivity: **seed_energy_nj > pump_power_w > crystal_length_cm > residual_gdd_fs2 > shg_length_mm**
