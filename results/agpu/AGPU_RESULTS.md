@@ -1,6 +1,6 @@
 # AGPU Autonomous Research Loop Results
 
-Generated: 2026-07-07 21:57:07  |  Iteration: 5
+Generated: 2026-07-07 21:57:10  |  Iteration: 6
 
 This file is auto-updated by the AGPU research daemon each loop.
 
@@ -36,3 +36,9 @@ This file is auto-updated by the AGPU research daemon each loop.
 
 ## Stage E: Sensitivity Analysis
 - Knob ranking by output energy sensitivity: **seed_energy_nj > pump_power_w > crystal_length_cm > residual_gdd_fs2 > shg_length_mm**
+
+## Stage F: Damage-Constrained Design Envelope
+- Safe designs: 63/63
+  - pump=400W crystal=8.0cm E=1.62µJ
+  - pump=350W crystal=8.0cm E=1.05µJ
+  - pump=300W crystal=8.0cm E=0.91µJ
