@@ -15,14 +15,14 @@ We present an open-source, physics-constrained digital twin and deep neural surr
 
 ## Contributions
 
-This work makes the following concrete contributions:
+This work transitions the Nd:YAG MOPA modeling pipeline from a passive forward simulator (answering *"given this design, what does the laser do?"*) into a constraint-aware, optimization-driven **research instrument** (answering *"given this target, what is the optimal damage-safe design?"*). We make the following concrete contributions:
 
-1. **Saturation-dependent fill-factor model** — a physically motivated gain-access correction that continuously interpolates between the small-signal ($G_0 = e^{F_{\text{store}}/F_{\text{sat}}}$) and fully-saturated Frantz–Nodvik regimes, implemented with a single shape parameter and no per-stage tuning.
+1. **Saturation-dependent fill-factor model** — a physically motivated gain-access correction that continuously interpolates between the small-signal ($G_0 = e^{F_{\text{store}}/F_{\text{sat}}}$) and fully-saturated Frantz–Nodvik regimes, using a single global transition parameter and zero per-stage tuning.
 2. **Coupled-wave SHG model** — an analytic Boyd–Jacobi elliptic SHG model with pump depletion and phase mismatch ($\Delta k = 75\text{ m}^{-1}$), predicting a realistic peak-then-rollover conversion curve with an optimum at 11.7 mm / 77.5%.
-3. **Neural surrogate** — a 4.2 M-parameter deep residual MLP (512 wide, 8 deep) mapping five design knobs to five performance metrics with $R^2 > 0.93$ and a negligible train/test gap across all outputs.
-4. **Calibrated ensemble inverse design** — gradient-based optimization through a 20-network deep ensemble (512-wide, 8-deep per member, 120k samples/member), evolving 16,384 parallel candidates over 800 steps. Outputs calibrated $\mu \pm \sigma$ uncertainty estimates per metric, verified against the physics engine with $< 1\%$ surrogate-vs-physics gap on all targets.
+3. **ML Surrogate Acceleration** — a 1M-sample importance-weighted deep residual MLP surrogate (25M parameters) that accelerates prediction by 100--1000x over the physical solver, achieving test $R^2 > 0.9999$ and a negligible train/test gap ($<0.000003$) across all metrics.
+4. **Constraint-Aware Inverse Design** — gradient-based optimization through a 20-network deep ensemble (512-wide, 8-deep per member, 120k samples/member), evolving 16,384 parallel candidates over 800 steps. It searches the physical design space (pump power, crystal length, seed energy, residual GDD, SHG crystal length) for specifications subject to the optical-damage fluence constraint ($5\text{ J/cm}^2$), returning calibrated $\mu \pm \sigma$ uncertainty estimates.
 5. **One-command reproducibility** — `python run_paper.py --full` regenerates every validation table, plot, trained model, and inverse-design result from a clean environment.
-6. **Honest validation** — we report LOSO cross-validation revealing mild overfitting / parameter sensitivity (full-fit MAE 10.88% vs. LOSO MAE 16.54%, gap 5.66 pp), an explicit Limitations section, and all data and code are open source.
+6. **Honest validation** — we report leave-one-stage-out (LOSO) cross-validation revealing mild overfitting / parameter sensitivity (full-fit MAE 10.88% vs. LOSO MAE 16.54%, gap 5.66 pp), an explicit Limitations section, and all data and code are open source.
 
 ---
 
@@ -34,7 +34,7 @@ A well-known limitation of 1D F-N models is their failure to account for beam-fi
 
 Machine learning has recently enabled data-driven laser design. Neural surrogates can replace computationally expensive physics simulations [4], and differentiable inverse design through neural networks has been demonstrated for photonic and gain-medium systems [5, 6].
 
-This work builds a validated digital twin of the Raza et al. 2025 1.28-J Nd:YAG MOPA chain, introduces a physically motivated saturation-dependent fill-factor model, and wraps it in a deep-learning surrogate for rapid gradient-based inverse design.
+This work builds a validated digital twin of the Raza et al. 2025 1.28-J Nd:YAG MOPA chain, introduces a physically motivated saturation-dependent fill-factor model, and wraps it in a deep-learning surrogate for rapid gradient-based inverse design. By inverting the simulator under an optical-damage fluence constraint, we reframe laser system design as a solved inverse problem rather than manual trial-and-error.
 
 ---
 
