@@ -1,0 +1,146 @@
+{
+  "timestamp": "2026-07-07 21:55:38",
+  "n_samples": 80000,
+  "results": [
+    {
+      "width": 512,
+      "depth": 4,
+      "n_params": 793605,
+      "mean_r2": 0.9998881459236145,
+      "r2_per_metric": {
+        "output_energy_j": 0.9998986721038818,
+        "pulse_duration_fs": 0.9999291300773621,
+        "m2": 0.9999762773513794,
+        "shg_efficiency": 0.9997369050979614,
+        "peak_power_w": 0.9998997449874878
+      },
+      "train_time_s": 2.2283759117126465
+    },
+    {
+      "width": 512,
+      "depth": 6,
+      "n_params": 1318917,
+      "mean_r2": 0.9998247385025024,
+      "r2_per_metric": {
+        "output_energy_j": 0.9998446106910706,
+        "pulse_duration_fs": 0.999860405921936,
+        "m2": 0.9999765157699585,
+        "shg_efficiency": 0.999603271484375,
+        "peak_power_w": 0.9998388886451721
+      },
+      "train_time_s": 3.0812926292419434
+    },
+    {
+      "width": 256,
+      "depth": 6,
+      "n_params": 331781,
+      "mean_r2": 0.9997709035873413,
+      "r2_per_metric": {
+        "output_energy_j": 0.99982088804245,
+        "pulse_duration_fs": 0.9997749328613281,
+        "m2": 0.999940812587738,
+        "shg_efficiency": 0.9994993805885315,
+        "peak_power_w": 0.9998185038566589
+      },
+      "train_time_s": 1.8033113479614258
+    },
+    {
+      "width": 256,
+      "depth": 4,
+      "n_params": 200197,
+      "mean_r2": 0.9997412323951721,
+      "r2_per_metric": {
+        "output_energy_j": 0.9997581839561462,
+        "pulse_duration_fs": 0.9998086094856262,
+        "m2": 0.9999489188194275,
+        "shg_efficiency": 0.9994240403175354,
+        "peak_power_w": 0.9997664093971252
+      },
+      "train_time_s": 1.3432934284210205
+    },
+    {
+      "width": 256,
+      "depth": 8,
+      "n_params": 463365,
+      "mean_r2": 0.9997375726699829,
+      "r2_per_metric": {
+        "output_energy_j": 0.9998399615287781,
+        "pulse_duration_fs": 0.9996463656425476,
+        "m2": 0.9999114274978638,
+        "shg_efficiency": 0.9994427561759949,
+        "peak_power_w": 0.9998473525047302
+      },
+      "train_time_s": 2.2891364097595215
+    },
+    {
+      "width": 512,
+      "depth": 8,
+      "n_params": 1844229,
+      "mean_r2": 0.9997214555740357,
+      "r2_per_metric": {
+        "output_energy_j": 0.9997275471687317,
+        "pulse_duration_fs": 0.9998124241828918,
+        "m2": 0.9999083876609802,
+        "shg_efficiency": 0.9994329214096069,
+        "peak_power_w": 0.9997259974479675
+      },
+      "train_time_s": 4.013462781906128
+    },
+    {
+      "width": 128,
+      "depth": 8,
+      "n_params": 116997,
+      "mean_r2": 0.9995651960372924,
+      "r2_per_metric": {
+        "output_energy_j": 0.9996556043624878,
+        "pulse_duration_fs": 0.9994194507598877,
+        "m2": 0.9997924566268921,
+        "shg_efficiency": 0.9992989897727966,
+        "peak_power_w": 0.9996594786643982
+      },
+      "train_time_s": 1.9460597038269043
+    },
+    {
+      "width": 128,
+      "depth": 6,
+      "n_params": 83973,
+      "mean_r2": 0.999510395526886,
+      "r2_per_metric": {
+        "output_energy_j": 0.9995922446250916,
+        "pulse_duration_fs": 0.9995942115783691,
+        "m2": 0.9998084902763367,
+        "shg_efficiency": 0.9989825487136841,
+        "peak_power_w": 0.9995744824409485
+      },
+      "train_time_s": 1.5664663314819336
+    },
+    {
+      "width": 128,
+      "depth": 4,
+      "n_params": 50949,
+      "mean_r2": 0.9994117259979248,
+      "r2_per_metric": {
+        "output_energy_j": 0.9993914365768433,
+        "pulse_duration_fs": 0.9996522068977356,
+        "m2": 0.9998538494110107,
+        "shg_efficiency": 0.9987787008285522,
+        "peak_power_w": 0.9993824362754822
+      },
+      "train_time_s": 4.291142225265503
+    }
+  ],
+  "best": {
+    "width": 512,
+    "depth": 4,
+    "n_params": 793605,
+    "mean_r2": 0.9998881459236145,
+    "r2_per_metric": {
+      "output_energy_j": 0.9998986721038818,
+      "pulse_duration_fs": 0.9999291300773621,
+      "m2": 0.9999762773513794,
+      "shg_efficiency": 0.9997369050979614,
+      "peak_power_w": 0.9998997449874878
+    },
+    "train_time_s": 2.2283759117126465
+  }
+}
