@@ -8,54 +8,54 @@
   "member_depth": 8,
   "pop": 16384,
   "steps": 800,
-  "seconds_total": 1772.0993592739105,
+  "seconds_total": 356.21527671813965,
   "best_design": {
-    "pump_power_w": 240.36158752441406,
-    "crystal_length_cm": 4.453095436096191,
-    "seed_energy_nj": 3330.822998046875,
-    "residual_gdd_fs2": 24199.306640625,
-    "shg_length_mm": 12.557936668395996
+    "pump_power_w": 240.36117553710938,
+    "crystal_length_cm": 4.68932580947876,
+    "seed_energy_nj": 3235.51904296875,
+    "residual_gdd_fs2": 24056.4609375,
+    "shg_length_mm": 12.568315505981445
   },
   "report": [
     {
       "metric": "output_energy_j",
       "target": 6e-06,
-      "surrogate": 5.785976100014523e-06,
-      "surrogate_std": 3.773790524519427e-08,
-      "physics_check": 5.764051989959848e-06,
-      "pct_diff_vs_target": 0.3654018342445741
+      "surrogate": 5.773839347966714e-06,
+      "surrogate_std": 4.0772111020714874e-08,
+      "physics_check": 5.7644109502816795e-06,
+      "pct_diff_vs_target": 0.15713996141723927
     },
     {
       "metric": "pulse_duration_fs",
       "target": null,
-      "surrogate": 3330.7265625,
-      "surrogate_std": 0.0014242923352867365,
-      "physics_check": 3330.7273357553668,
-      "pct_diff_vs_target": 2.3215816496990943e-05
+      "surrogate": 3330.7255859375,
+      "surrogate_std": 0.0014788107946515083,
+      "physics_check": 3330.7266186945235,
+      "pct_diff_vs_target": 3.1006968207026076e-05
     },
     {
       "metric": "m2",
       "target": 1.1,
-      "surrogate": 1.1000854969024658,
-      "surrogate_std": 0.00044668797636404634,
-      "physics_check": 1.0995783719744001,
-      "pct_diff_vs_target": 0.04610226618779139
+      "surrogate": 1.0999932289123535,
+      "surrogate_std": 0.0004668609763029963,
+      "physics_check": 1.0995782012939452,
+      "pct_diff_vs_target": 0.03772978349166193
     },
     {
       "metric": "shg_efficiency",
       "target": 0.01,
-      "surrogate": 0.01001379732042551,
-      "surrogate_std": 0.00012839092232752591,
-      "physics_check": 0.009934550423604594,
-      "pct_diff_vs_target": 0.7924689682091597
+      "surrogate": 0.00999799557030201,
+      "surrogate_std": 0.0001209837500937283,
+      "physics_check": 0.0099514870568989,
+      "pct_diff_vs_target": 0.4650851340310888
     },
     {
       "metric": "peak_power_w",
       "target": 1500000.0,
       "surrogate": 1622614.875,
-      "surrogate_std": 10864.2861328125,
-      "physics_check": 1626734.4409726278,
-      "pct_diff_vs_target": 0.2746377315085226
+      "surrogate_std": 12630.4013671875,
+      "physics_check": 1626836.097220304,
+      "pct_diff_vs_target": 0.2814148146869304
     }
   ]
 }

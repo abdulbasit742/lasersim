@@ -6,7 +6,7 @@
   "samples": 1000000,
   "shg_oversample_frac": 0.35,
   "epochs_run": 60,
-  "seconds": 282.3068597316742,
+  "seconds": 304.3485276699066,
   "r2": {
     "output_energy_j": 0.9999588002229559,
     "pulse_duration_fs": 0.9999503188526695,
