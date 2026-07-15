@@ -4,50 +4,53 @@
 ![python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
-A research-grade, extensible **laser modeling platform** in Python, built around
-a real system: the all-diode-pumped **1.28 J, 200 ps Nd:YAG amplifier** from
+LASERSIM is an extensible **laser modeling platform** in Python, built around a
+published system: the all-diode-pumped **1.28 J, 200 ps Nd:YAG amplifier** from
 Raza et al., *Optics Communications* 577 (2025) 131413 (NILOP College, PIEAS).
 
-LASERSIM models the **entire signal chain** of a high-energy picosecond laser,
-from wall socket to delivered application, with ~40 standalone physics engines,
-each validated against the paper or a known physical bound. See
-[`ARCHITECTURE.md`](ARCHITECTURE.md) for the full signal-flow map.
+It models a broad high-energy picosecond laser signal chain with standalone
+physics engines. Verification is evidence-graded: a literature reproduction,
+a physical design bound, a mathematical/model invariant, and a smoke check are
+reported separately rather than presented as equivalent forms of validation.
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the signal-flow map and
+[`docs/validation-evidence.md`](docs/validation-evidence.md) for the evidence
+contract.
 
 ## What it covers
 
-- **Gain dynamics:** oscillator rate equations (9 models), regen buildup,
-  Frantz-Nodvik amplifier chain, in-pulse temporal reshaping, spatial gain,
-  gain narrowing, ASE / parasitic limits.
-- **Pump & thermal:** 808 nm diode model, radial heat solve, thermal lens +
-  ABCD cavity, coolant convection, rep-rate limit, depolarization.
-- **Beam & propagation:** serrated-aperture + spatial-filter shaping, relay
-  imaging, self-focusing (NLSE), Raman, M^2 / brightness, wavefront + Strehl,
-  adaptive optics, pointing stability.
-- **Nonlinear & harmonics:** polarization (Jones), SHG (532), THG (355),
-  OPCPA, CPA stretch/compress.
-- **Safety & diagnostics:** LIDT damage auditor, eye/skin hazard, timing
-  jitter, autocorrelation, pulse contrast, efficiency budget.
-- **Applications:** laser ranging, micromachining, plasma / soft X-ray,
-  dermatology.
-- **Tooling:** config-driven chains, full-system orchestrator, batch/GPU
-  sweeps, Monte Carlo tolerancing, literature benchmark, data import,
-  HTML/PDF report, Streamlit dashboard, unified CLI, validation scorecard.
+- **Gain dynamics:** oscillator rate equations, regenerative buildup,
+  Frantz-Nodvik amplifier chains, in-pulse temporal reshaping, spatial gain,
+  gain narrowing, and ASE/parasitic limits.
+- **Pump and thermal:** 808 nm diode modeling, radial heat solutions, thermal
+  lens and ABCD cavity behavior, coolant convection, repetition-rate limits,
+  and depolarization.
+- **Beam and propagation:** beam shaping, relay imaging, self-focusing,
+  Raman effects, M²/brightness, wavefront/Strehl, adaptive optics, and pointing.
+- **Nonlinear and harmonics:** Jones polarization, SHG, THG, OPCPA, and CPA.
+- **Safety and diagnostics:** modeled LIDT margin, eye/skin hazard estimates,
+  timing jitter, autocorrelation, pulse contrast, and efficiency budgets.
+- **Applications and tooling:** ranging, micromachining, plasma/soft X-ray and
+  dermatology models, config-driven chains, sweeps, tolerancing, reports, a
+  Streamlit dashboard, and a unified CLI.
+
+Safety outputs are engineering model estimates, not a certified laser safety
+assessment or a substitute for a qualified laser safety officer.
 
 ## Quick start
 
 ```bash
-pip install -r requirements.txt
-pip install -e .                  # installs the `lasersim` command
+python -m pip install -r requirements.txt
+python -m pip install -e .
 
-lasersim info                     # list every engine
-lasersim system                   # whole NILOP pipeline vs the paper
-lasersim validate                 # cross-engine pass/fail scorecard
-lasersim examples                 # guided tour
-streamlit run dashboard.py        # interactive web UI
-pytest -q                         # full test suite
+lasersim info
+lasersim system
+lasersim validate
+lasersim examples
+streamlit run dashboard.py
+python -m pytest -q
 ```
 
-Run any engine directly, e.g.:
+Run an individual engine directly, for example:
 
 ```bash
 lasersim amplifier
@@ -59,21 +62,52 @@ lasersim safety
 
 ## Core physics
 
-```
-Oscillator : dN/dt = Rp - N/tau - c sigma N S ;  dS/dt = c sigma N S - S/tau_c + beta N/tau
-Amplifier  : F_out = F_sat ln(1 + G0 (e^{F_in/F_sat} - 1)) ;  B = (2pi/lambda) integral n2 I dz
+```text
+Oscillator : dN/dt = Rp - N/tau - c sigma N S ; dS/dt = c sigma N S - S/tau_c + beta N/tau
+Amplifier  : F_out = F_sat ln(1 + G0 (e^{F_in/F_sat} - 1)) ; B = (2pi/lambda) integral n2 I dz
 Thermal    : (1/r) d/dr(r k dT/dr) + Q(r) = 0
-SHG        : eta = tanh^2( L sqrt(2 omega^2 deff^2 I / (n^3 eps0 c^3)) )
+SHG        : eta = tanh^2(L sqrt(2 omega^2 deff^2 I / (n^3 eps0 c^3)))
 Self-focus : dE/dz = (i/2k) lap_perp E + i k0 n2 |E|^2 E
 ```
 
-## Validation
+## Evidence-graded verification
 
-`lasersim validate` runs every major engine on the NILOP system and prints one
-pass/fail scorecard. The `pytest` suite and GitHub Actions CI run on every push
-across Python 3.10/3.11/3.12. See [`BENCHMARKS.md`](BENCHMARKS.md) for the full
-Table 1 / Table 2 reproduction.
+`lasersim validate` runs 20 checks and labels each result with its actual
+evidence strength:
+
+- **Literature (3):** compares a stated quantity or ordering with a published
+  result or established material relation.
+- **Physical bound (6):** checks a documented engineering or model limit.
+- **Invariant (8):** checks monotonicity, ordering, sign, or another property
+  that should hold inside the implemented model.
+- **Smoke (3):** confirms an execution path returns a plausible finite result;
+  this is not experimental validation.
+
+Every check has a stable ID, quantity, unit, criterion, and reference. Registry
+drift fails tests and CI.
+
+Text report:
+
+```bash
+lasersim validate
+```
+
+Machine-readable report:
+
+```bash
+lasersim validate --format json --output validation-report.json
+```
+
+Reports refuse to overwrite an existing file unless `--overwrite` is supplied.
+The JSON includes the Python/NumPy environment, per-level totals, enriched check
+metadata, and explicit limitations. CI generates and validates this report on
+Python 3.10, 3.11, and 3.12.
+
+`pytest` covers the evidence registry and report contract in addition to the
+physics suite. See [`BENCHMARKS.md`](BENCHMARKS.md) for the NILOP table
+reproduction; passing an invariant or smoke check must not be described as a
+literature or experimental validation.
 
 ## License
 
-MIT (see LICENSE).
+MIT (see `LICENSE`).
