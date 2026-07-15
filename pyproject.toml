@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "lasersim"
 version = "0.1.0"
-description = "Research-grade laser modeling platform: oscillator dynamics, Frantz-Nodvik amplifier chains, thermal lensing, beam shaping, OPCPA, and batch optimization. Reproduces the NILOP 1.28 J / 200 ps Nd:YAG amplifier."
+description = "Extensible laser modeling platform with evidence-graded verification for amplifier, thermal, nonlinear, propagation, and diagnostic models."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -38,4 +38,5 @@ Homepage = "https://github.com/abdulbasit742/lasersim"
 py-modules = [
   "cli", "laser_platform", "amplifier", "spatial_gain", "thermal_abcd",
   "beam_shaping", "opcpa", "full_system", "sweep", "data_io", "dashboard",
+  "validate", "validation_evidence",
 ]
