@@ -21,6 +21,12 @@ class Check:
     detail: str
 
 
+@dataclass(frozen=True)
+class CheckSpec:
+    name: str
+    function: Callable[[], Check]
+
+
 def _energy():
     from amplifier import build_nilop_amplifier
     final = build_nilop_amplifier().run()[-1].e_out_mJ
@@ -53,16 +59,17 @@ def _thermal():
 
 def _cooling():
     from cooling import CoolingChannel
-    ch = CoolingChannel()
-    return Check("cooling", ch.wall_rise(15, 200) < ch.wall_rise(3, 200), "flow cools wall")
+    channel = CoolingChannel()
+    return Check("cooling", channel.wall_rise(15, 200) < channel.wall_rise(3, 200), "flow cools wall")
 
 
 def _relay():
     from relay_imaging import q_from_w, w_from_q, propagate, build_nilop_relays
-    q = q_from_w(3e-3)
+    q_parameter = q_from_w(3e-3)
     for relay in build_nilop_relays():
-        q, _ = propagate(q, relay.elements())
-    return Check("relay", 2 * w_from_q(q) > 6e-3, f"booster {2 * w_from_q(q) * 1e3:.0f} mm")
+        q_parameter, _ = propagate(q_parameter, relay.elements())
+    diameter_mm = 2 * w_from_q(q_parameter) * 1e3
+    return Check("relay", diameter_mm > 6, f"booster {diameter_mm:.0f} mm")
 
 
 def _ase():
@@ -77,9 +84,13 @@ def _damage():
 
 def _oscillator():
     from laser_platform import Cavity, FourLevelLaser
-    cav = Cavity()
-    N_ss, _ = FourLevelLaser(cav).steady_state()
-    return Check("oscillator", np.isclose(N_ss, cav.N_threshold, rtol=1e-6), "clamps at threshold")
+    cavity = Cavity()
+    steady_state_inversion, _ = FourLevelLaser(cavity).steady_state()
+    return Check(
+        "oscillator",
+        np.isclose(steady_state_inversion, cavity.N_threshold, rtol=1e-6),
+        "clamps at threshold",
+    )
 
 
 def _shg():
@@ -154,21 +165,40 @@ def _walkoff():
     )
 
 
-CHECKS: List[Callable[[], Check]] = [
-    _energy, _b_integral, _polarization, _thermal, _cooling, _relay, _ase,
-    _damage, _oscillator, _shg, _regen, _wavefront, _safety, _materials,
-    _dispersion, _storage, _coatings, _harmonics_chain, _ranging, _walkoff,
+CHECKS: List[CheckSpec] = [
+    CheckSpec("energy", _energy),
+    CheckSpec("B-integral", _b_integral),
+    CheckSpec("polarization", _polarization),
+    CheckSpec("thermal", _thermal),
+    CheckSpec("cooling", _cooling),
+    CheckSpec("relay", _relay),
+    CheckSpec("ase", _ase),
+    CheckSpec("damage", _damage),
+    CheckSpec("oscillator", _oscillator),
+    CheckSpec("shg", _shg),
+    CheckSpec("regen", _regen),
+    CheckSpec("wavefront", _wavefront),
+    CheckSpec("safety", _safety),
+    CheckSpec("materials", _materials),
+    CheckSpec("dispersion", _dispersion),
+    CheckSpec("storage", _storage),
+    CheckSpec("coatings", _coatings),
+    CheckSpec("chain_e2e", _harmonics_chain),
+    CheckSpec("ranging", _ranging),
+    CheckSpec("walkoff", _walkoff),
 ]
-EXPECTED_CHECK_NAMES = tuple(EVIDENCE)
+CHECK_NAMES = tuple(spec.name for spec in CHECKS)
 
 
-def run_checks(checks: Sequence[Callable[[], Check]] = CHECKS) -> list[Check]:
+def run_checks(checks: Sequence[CheckSpec] = CHECKS) -> list[Check]:
     results = []
-    for function in checks:
+    for spec in checks:
         try:
-            result = function()
+            result = spec.function()
+            if result.name != spec.name:
+                result = Check(spec.name, False, f"ERROR: check returned mismatched ID {result.name!r}")
         except Exception as error:  # verification should report every subsystem
-            result = Check(function.__name__.strip("_"), False, f"ERROR: {error}")
+            result = Check(spec.name, False, f"ERROR: {error}")
         results.append(result)
     return results
 
@@ -186,7 +216,7 @@ def render_text(results: Sequence[Check]) -> str:
         lines.append(f"         quantity={evidence.quantity}; unit={evidence.unit}; criterion={evidence.criterion}")
         lines.append(f"         reference={evidence.reference}")
     passed = sum(result.passed for result in results)
-    by_level = {}
+    by_level: dict[str, list[int]] = {}
     for result in results:
         level = EVIDENCE[result.name].level
         by_level.setdefault(level, [0, 0])
@@ -200,11 +230,11 @@ def render_text(results: Sequence[Check]) -> str:
 
 
 def _write_output(path: Path, payload: str, overwrite: bool) -> None:
-    path = path.expanduser().resolve()
-    if path.exists() and not overwrite:
-        raise FileExistsError(f"refusing to overwrite existing report: {path}")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(payload + ("" if payload.endswith("\n") else "\n"), encoding="utf-8")
+    output_path = path.expanduser().resolve()
+    if output_path.exists() and not overwrite:
+        raise FileExistsError(f"refusing to overwrite existing report: {output_path}")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(payload + ("" if payload.endswith("\n") else "\n"), encoding="utf-8")
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -214,7 +244,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--overwrite", action="store_true", help="allow replacing an existing report")
     args = parser.parse_args(argv)
 
-    validate_registry(EXPECTED_CHECK_NAMES)
+    validate_registry(CHECK_NAMES)
     results = run_checks()
     report = build_report(results)
     payload = json.dumps(report, indent=2, sort_keys=True) if args.format == "json" else render_text(results)
