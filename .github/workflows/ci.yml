@@ -10,7 +10,6 @@ on:
       - ".github/PULL_REQUEST_TEMPLATE.md"
       - ".github/dependabot.yml"
       - ".github/workflows/security.yml"
-      - ".github/workflows/ci.yml"
   push:
     branches:
       - main
@@ -21,7 +20,6 @@ on:
       - ".github/PULL_REQUEST_TEMPLATE.md"
       - ".github/dependabot.yml"
       - ".github/workflows/security.yml"
-      - ".github/workflows/ci.yml"
   workflow_dispatch:
 
 permissions:
@@ -47,3 +45,21 @@ jobs:
           python -m pip install pytest
       - name: Run tests
         run: pytest -q
+      - name: Verify evidence-graded report
+        run: |
+          python validate.py --format json --output validation-report.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("validation-report.json").read_text(encoding="utf-8"))
+          assert report["schema_version"] == 1
+          assert report["summary"]["total"] == 20
+          assert report["summary"]["failed"] == 0
+          allowed = {"literature", "physical_bound", "invariant", "smoke"}
+          assert {item["evidence"]["level"] for item in report["checks"]} <= allowed
+          assert all(item["evidence"]["quantity"] for item in report["checks"])
+          assert all(item["evidence"]["unit"] for item in report["checks"])
+          assert all(item["evidence"]["criterion"] for item in report["checks"])
+          assert all(item["evidence"]["reference"] for item in report["checks"])
+          PY
