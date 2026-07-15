@@ -18,16 +18,17 @@ def sample_results():
 
 
 def test_registry_matches_every_executable_check():
-    validate_registry(validate.EXPECTED_CHECK_NAMES)
-    assert set(validate.EXPECTED_CHECK_NAMES) == set(EVIDENCE)
+    validate_registry(validate.CHECK_NAMES)
+    assert validate.CHECK_NAMES == tuple(spec.name for spec in validate.CHECKS)
+    assert set(validate.CHECK_NAMES) == set(EVIDENCE)
     assert len(validate.CHECKS) == len(EVIDENCE) == 20
 
 
 def test_registry_rejects_missing_or_orphan_metadata():
     with pytest.raises(ValueError, match="missing evidence"):
-        validate_registry([*validate.EXPECTED_CHECK_NAMES, "unregistered"])
+        validate_registry([*validate.CHECK_NAMES, "unregistered"])
     with pytest.raises(ValueError, match="orphan evidence"):
-        validate_registry(validate.EXPECTED_CHECK_NAMES[:-1])
+        validate_registry(validate.CHECK_NAMES[:-1])
 
 
 def test_every_evidence_entry_is_specific_and_supported():
@@ -58,7 +59,7 @@ def test_report_separates_evidence_levels():
 def test_report_is_json_serializable_and_names_limitations():
     payload = json.dumps(build_report(sample_results()), sort_keys=True)
     assert "Invariant and smoke checks are not experimental validation" in payload
-    assert "platform" not in payload.lower() or "environment" in payload.lower()
+    assert '"environment"' in payload
 
 
 def test_text_output_displays_evidence_grade_and_caveat():
@@ -68,15 +69,27 @@ def test_text_output_displays_evidence_grade_and_caveat():
     assert "invariant and smoke checks are not experimental validation" in text
 
 
-def test_run_checks_records_exceptions_without_stopping():
-    def _broken():
+def test_run_checks_records_exceptions_under_stable_id():
+    def broken_function():
         raise RuntimeError("boom")
 
-    results = validate.run_checks([_broken])
+    results = validate.run_checks([validate.CheckSpec("stable-id", broken_function)])
     assert len(results) == 1
-    assert results[0].name == "broken"
+    assert results[0].name == "stable-id"
     assert results[0].passed is False
     assert results[0].detail == "ERROR: boom"
+
+
+def test_run_checks_rejects_mismatched_returned_id():
+    def wrong_id():
+        return validate.Check("other-id", True, "incorrect")
+
+    result = validate.run_checks([validate.CheckSpec("registered-id", wrong_id)])[0]
+    assert result == validate.Check(
+        "registered-id",
+        False,
+        "ERROR: check returned mismatched ID 'other-id'",
+    )
 
 
 def test_json_cli_exit_code_reflects_failed_checks(monkeypatch, capsys):
