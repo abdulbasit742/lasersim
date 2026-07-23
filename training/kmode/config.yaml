@@ -1,0 +1,16 @@
+model:
+  input_features: 3
+  hidden_size: 64
+  classes: 10
+
+training:
+  epochs: 50
+  learning_rate: 0.001
+  batch_size: 32
+
+beam_dataset:
+  samples: 5000
+  profiles:
+    - gaussian
+    - hermite_gaussian
+    - laguerre_gaussian
