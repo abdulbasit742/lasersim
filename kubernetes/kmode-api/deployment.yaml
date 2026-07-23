@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lasersim-kmode-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lasersim-kmode-api
+  template:
+    metadata:
+      labels:
+        app: lasersim-kmode-api
+    spec:
+      containers:
+      - name: api
+        image: lasersim/kmode-api:latest
+        ports:
+        - containerPort: 8000
