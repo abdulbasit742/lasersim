@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kmode-api-config
+data:
+  ENVIRONMENT: production
+  MODEL_PATH: /models/kmode_model.pt
