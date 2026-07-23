@@ -1,0 +1,9 @@
+services:
+  kmode-trainer:
+    build:
+      context: ../..
+      dockerfile: docker/kmode/Dockerfile
+    container_name: lasersim-kmode-training
+    volumes:
+      - ../..:/workspace
+    command: python training/kmode/cli.py --help
