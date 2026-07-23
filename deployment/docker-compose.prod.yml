@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  lasersim-api:
+    build:
+      context: ../..
+    restart: unless-stopped
+    environment:
+      - LASERSIM_ENV=production
+    ports:
+      - "8000:8000"
