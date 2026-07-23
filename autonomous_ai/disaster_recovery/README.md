@@ -1,8 +1,13 @@
 # Disaster Recovery Layer
 
-Provides the foundation for resilient LaserSim operations.
+Foundation for autonomous recovery management.
 
-Components:
-- Zero downtime recovery manager
-- Automated failover workflows
-- Future disaster recovery orchestration
+## Components
+
+- Disaster recovery orchestration
+- Backup intelligence
+- Future recovery testing simulation
+
+Architecture:
+
+Failure Detection -> Recovery Orchestrator -> Backup Intelligence -> Restoration Workflow
