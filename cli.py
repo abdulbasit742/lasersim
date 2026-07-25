@@ -5,6 +5,9 @@ cli.py  -  unified command-line entry point for the whole LASERSIM platform
 ================================================================================
 One command to drive every engine. Install with `pip install -e .` then run
 `lasersim <engine> [args]`. See `lasersim info` for the full list.
+
+Every runnable module in the repo root must appear in ENGINES - if it is missing
+here it is dead code from the user's point of view.
 ================================================================================
 """
 from __future__ import annotations
@@ -23,8 +26,12 @@ ENGINES = {
     "spatial": "spatial_gain",
     "temporal": "temporal",
     "gain-narrowing": "gain_narrowing",
+    "storage": "storage",
+    "seed": "seed",
+    "cavity-modes": "cavity_modes",
     # pump / thermal
     "pump": "pump_diode",
+    "pump-absorption": "pump_absorption",
     "thermal": "thermal_abcd",
     "thermal-fem": "thermal_fem",
     "cooling": "cooling",
@@ -32,26 +39,49 @@ ENGINES = {
     "depolarization": "depolarization",
     # beam / propagation
     "beam": "beam_shaping",
+    "beam-combining": "beam_combining",
     "relay": "relay_imaging",
     "propagation": "propagation",
     "beam-quality": "beam_quality",
     "wavefront": "wavefront",
     "adaptive-optics": "adaptive_optics",
+    "pointing": "pointing",
     # polarization / nonlinear / harmonics
     "polarization": "polarization",
     "shg": "shg",
     "thg": "thg",
     "opcpa": "opcpa",
     "cpa": "cpa",
+    "phase-matching": "phase_matching",
+    "walkoff": "walkoff",
+    "raman": "raman",
+    "nonlinear-absorption": "nonlinear_absorption",
+    "dispersion": "dispersion",
+    "prism-compressor": "prism_compressor",
+    "pockels": "pockels",
+    "isolator": "isolator",
+    "coatings": "coatings",
     # limits / safety / diagnostics
     "ase": "ase",
     "damage": "damage",
+    "breakdown": "breakdown",
     "safety": "safety",
     "jitter": "jitter",
+    "noise": "noise",
+    "contrast": "contrast",
     "autocorrelation": "autocorrelation",
+    "frog": "frog",
+    "detectors": "detectors",
+    "power-meter": "power_meter",
     "efficiency": "efficiency",
+    # applications
+    "ablation": "ablation",
+    "dermatology": "dermatology",
+    "ranging": "ranging",
+    "plasma": "plasma",
     # system / tooling
     "system": "full_system",
+    "chain": "chain_e2e",
     "config": "config",
     "sweep": "sweep",
     "sensitivity": "sensitivity",
@@ -88,9 +118,9 @@ def cmd_info(_: List[str]) -> int:
     print(BANNER)
     print(f"{len(ENGINES)} engines available:\n")
     for name, mod in ENGINES.items():
-        print(f"  {name:<18} -> {mod}.py")
-    print("  dashboard          -> dashboard.py (Streamlit)")
-    print("\nTry:  lasersim system     |     lasersim validate")
+        print(f"  {name:<22} -> {mod}.py")
+    print("  dashboard              -> dashboard.py (Streamlit)")
+    print("\nTry:  lasersim system     |     lasersim validate     |     lasersim power-meter")
     return 0
 
 
